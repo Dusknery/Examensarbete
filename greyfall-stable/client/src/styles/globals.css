@@ -1,0 +1,202 @@
+/* ===============================
+   Greyfall Stable - Global CSS
+   Palette + Typography from Figma
+================================= */
+
+:root {
+  /* Colors */
+  --white: #ffffff;
+  --bg: #f9f0e6;          /* background */
+  --highlight: #f2ddbb;   /* form/news highlighted background */
+  --gold: #cc9f57;        /* header/buttons */
+  --text: #000000;        /* text */
+  --link: #2292e2;        /* links */
+  --border: rgba(0, 0, 0, 0.12);
+ 
+  /* Radius + spacing */
+  --radius: 14px;
+  --radius-sm: 10px;
+
+  --container: 820px;
+
+  /* Typography stacks (fallback-safe) */
+  --font-base: "Cormorant Infant", "Georgia", serif;          /* information */
+  --font-nav: "Montserrat Subrayada", "Georgia", serif;       /* nav */
+  --font-site: "Water Brush", "Georgia", serif;               /* site name */
+  --font-horses: "Katibeh", "Georgia", serif;                 /* horse info */
+  --font-news: "Suwannaphum", "Cormorant Infant", serif;      /* news heading (fallback) */
+
+  font-family: "Cormorant Infant", serif;
+font-family: "Montserrat Subrayada", serif;
+font-family: "Water Brush", cursive;
+font-family: "Katibeh", serif;
+}
+
+/* ===============================
+   RESET
+================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-base);
+  line-height: 1.6;
+}
+
+/* ===============================
+   GLOBAL LINKS
+================================= */
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ===============================
+   LAYOUT
+================================= */
+.page-container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+  display: grid;
+  gap: 24px;
+}
+
+/* ===============================
+   NAVBAR BAS (enkel, kan stylas mer sen)
+================================= */
+.navbar {
+  background: var(--gold);
+}
+
+.navbar-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.site-name {
+  font-family: var(--font-site);
+  font-size: 30px;
+  color: var(--white);
+  line-height: 1;
+}
+
+.nav-links {
+  margin-left: auto;
+  display: flex;
+  gap: 34px;
+  font-family: var(--font-nav);
+  letter-spacing: 0.06em;
+}
+
+.nav-links a {
+  color: var(--white);
+  font-weight: 400;
+}
+
+.nav-links a:hover {
+  opacity: 0.85;
+}
+
+/* ===============================
+   TYPOGRAPHY HELPERS
+================================= */
+.h-news {
+  font-family: var(--font-news);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.h-horse {
+  font-family: var(--font-horses);
+  font-size: 28px;
+  font-weight: 400;
+}
+
+/* ===============================
+   CARDS / CONTAINERS
+================================= */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+
+.card-highlight {
+  background: var(--highlight);
+  border: 1px solid rgba(204, 159, 87, 0.45);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+
+/* ===============================
+   BUTTONS
+================================= */
+button,
+.btn {
+  background: var(--gold);
+  color: var(--black);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 9px 18px;
+  font-family: var(--font-base);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button:hover,
+.btn:hover {
+  opacity: 0.9;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   INPUTS
+================================= */
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 10px;
+  font-family: var(--font-base);
+  background: var(--white);
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* ===============================
+   SCROLL BOX (nyheter)
+================================= */
+.scroll-box {
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
