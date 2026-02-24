@@ -1,0 +1,217 @@
+/* Breeding Page Styles */
+
+.breedingPage {
+  max-width: 760px;
+  display: grid;
+  gap: 14px;
+    margin: 0 auto;
+}
+
+.breedingHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+}
+
+.breedingPage .horsesLogo {
+  width: 300px;
+  height: 300px;
+  flex-shrink: 0;
+  margin-left: -150px;
+}
+
+.breedingPage .horsesLogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.breedingPage .horsesTitle {
+  font-size: 48px;
+  font-weight: 400;
+  color: #000000;
+  font-family: Georgia, serif;
+  margin: 0;
+  line-height: 1;
+  margin-top: 20px;
+}
+
+.breedingPage h2 {
+  font-size: 24px;
+  font-weight: 400;
+  margin: 40px 0 30px 0;
+  font-family: Georgia, serif;
+  text-align: center;
+}
+
+.breedingPage p {
+  line-height: 1.6;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.breedingPage ul {
+  line-height: 1.8;
+  margin: 10px 0;
+  padding-left: 24px;
+  text-align: left;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.breedingPage a {
+  color: #CC9F57;
+  text-decoration: underline;
+}
+
+.breedingForm {
+  display: grid;
+  gap: 24px;
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  background: #F2DDBB;
+  margin-top: 40px;
+}
+
+.breedingField {
+  display: grid;
+  gap: 6px;
+}
+
+.breedingField strong {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  color: black;
+}
+
+.breedingInput {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-family: Georgia, serif;
+  max-width: 400px;
+  color: black;
+}
+
+.breedingFileButton {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: none;
+  background: #c69c5d;
+  color: black;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: Georgia, serif;
+  font-size: 12px;
+  transition: opacity 0.2s;
+  width: fit-content;
+}
+
+.breedingFileButton:hover {
+  opacity: 0.9;
+}
+
+.breedingField input[type="file"] {
+  display: none;
+}
+
+.breedingTextarea {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  resize: vertical;
+  font-family: Georgia, serif;
+  max-width: 400px;
+  color: black;
+}
+
+.breedingSelect {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  font-family: Georgia, serif;
+  background: white;
+  max-width: 420px;
+  color: black;
+}
+
+.breedingModeButtons {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.breedingModeButton {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: Georgia, serif;
+  transition: background 0.2s;
+  color: black;
+}
+
+.breedingModeButton.active {
+  background: #CC9F57;
+  color: black;
+}
+
+.breedingModeButton:hover {
+  opacity: 0.9;
+}
+
+.selectedStud {
+  opacity: 0.85;
+  font-family: Georgia, serif;
+  color: black;
+}
+
+.fileInfo {
+  font-size: 12px;
+  opacity: 0.8;
+  color: black;
+}
+
+.breedingSubmitButton {
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: #c69c5d;
+  color: black;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 8px;
+  font-family: Georgia, serif;
+  transition: opacity 0.2s;
+}
+
+.breedingSubmitButton:hover {
+  opacity: 0.9;
+}
+
+.breedingStatus {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-family: Georgia, serif;
+}
+
+.breedingStatus.success {
+  background: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.breedingStatus.error {
+  background: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}

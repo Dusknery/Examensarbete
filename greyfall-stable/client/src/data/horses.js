@@ -2,11 +2,13 @@ export const horses = [
     {
         id: "casanova",
         name: "Casanova",
+        nickname: "Casanova",
         breed: "Connemara",
         year: 2019,
         ageText: "7 år, 2019",
         sex: "Valack",
         isStud: false,
+        imageUrl: "/images/avelshastar.png",
 
         sireId: null,
         damId: null,
@@ -42,11 +44,14 @@ export const horses = [
     {
         id: "starboy",
         name: "Björkängens Starboy RP314",
+        nickname: "Starboy",
+
         breed: "Svensk ridponny",
         year: 2011,
         ageText: "15 år, 2011",
         sex: "Hingst",
         isStud: true,
+        imageUrl: "/images/avelshastar.png",
 
         sireId: null,
         damId: null,
@@ -83,17 +88,31 @@ export const horses = [
         description:
             "Björkängens Starboy RP314 är en allsidig och sportig svensk ridponnyhingst med tydlig kapacitet inom dressyr, hoppning och terräng. Han är intelligent och arbetsvillig med snabb reaktionsförmåga och frammåtbjudning.\n\nI vardagen är han intelligent och snabbtänkt vilket kan leda till intressanta situationer. Han föredrar en strukturerad vardag och samma rutiner. I ridningen är han framåt utan att bli okontrollerad. Han är snabb för hjälperna, lätt att reglera och arbetar med god energi. Han kräver en ryttare med tydlighet, sits och lätt hand.\n\nHan är utbildad upp till MSV C i dressyr. I hoppningen är han utbildad upp till 120 cm och har god spänst och kraft. I terrängen är han utbildad upp till 1*.\n\nHan har två tidigare avkommor. Avkommorna visar goda rörelser och bra mentalitet, men är ännu för unga för tävling.",
         notes: "Maxad D-ponny. Kan ge flera färger beroende på sto.",
+        
+        offspring: [
+            {
+                name: "Greyfalls Constellation",
+                imageUrl: "/images/avelshastar.png"
+            },
+            {
+                name: "Radiant Axiell",
+                imageUrl: "/images/avelshastar.png"
+            }
+        ],
 
     },
 
     {
         id: "constellation",
         name: "Greyfalls Constellation",
+        nickname: "Const",
+
         breed: "Svensk ridponny",
         year: 2021,
         ageText: "5 år, 2021",
         sex: "Hingst",
         isStud: false,
+        imageUrl: "/images/avelshastar.png",
 
         sireId: "starboy",
         damId: null,
@@ -133,11 +152,14 @@ export const horses = [
     {
         id: "rose",
         name: "Casa Relvas Rosé",
+        nickname: "Rose",
+
         breed: "PRE",
         year: 2010,
         ageText: "16 år, 2010",
         sex: "Sto",
         isStud: false,
+        imageUrl: "/images/avelshastar.png",
 
         sireId: null,
         damId: null,
@@ -174,11 +196,13 @@ export const horses = [
     {
         id: "highpeak",
         name: "High Peak (SWB)",
+        nickname: "High Peak",
         breed: "Svenskt Varmblod",
         year: 2023,
         ageText: "3 år, 2023",
         sex: "Hingst",
         isStud: false,
+        imageUrl: "/images/avelshastar.png",
 
         sireId: null,
         damId: null,
@@ -219,11 +243,13 @@ export const horses = [
     {
         id: "mistergrey",
         name: "Mister Grey",
+        nickname: "Grey",
         breed: "Irish Sport Horse",
         year: 2002,
         ageText: "24 år, 2002",
         sex: "Valack",
         isStud: false,
+        imageUrl: "/images/avelshastar.png",
 
         sireId: null,
         damId: null,
@@ -259,11 +285,13 @@ export const horses = [
     {
         id: "sadie",
         name: "Sadira Z (SWB)",
+        nickname: "Sadie",
         breed: "Svenskt Varmblod",
         year: 2011,
         ageText: "14 år, 2011",
         sex: "Sto",
         isStud: false,
+        imageUrl: "/images/avelshastar.png",
 
         sireId: null,
         damId: null,
@@ -300,11 +328,13 @@ export const horses = [
     {
         id: "pedro",
         name: "Casillero del Diablo",
+        nickname: "Pedro",
         breed: "PRE",
         year: 2014,
         ageText: "12 år, 2014",
         sex: "Valack",
         isStud: false,
+        imageUrl: "/images/avelshastar.png",
 
         sireId: null,
         damId: "rose",
@@ -345,11 +375,13 @@ export const horses = [
     {
         id: "botanico",
         name: "Dream Heart Botanico (KWPN)",
+        nickname: "Botanico",
         breed: "KWPN",
         year: 2019,
         ageText: "7 år, 2019",
         sex: "Hingst",
         isStud: true,
+        imageUrl: "/images/avelshastar.png",
 
         sireId: null,
         damId: null,
@@ -390,11 +422,13 @@ export const horses = [
     {
         id: "danny",
         name: "Dynamite Detonation",
+            nickname: "Danny",
         breed: "Hannoveranare",
         year: 2022,
         ageText: "4 år, 2022",
         sex: "Valack",
         isStud: false,
+        imageUrl: "/images/avelshastar.png",
 
         sireId: null,
         damId: null,

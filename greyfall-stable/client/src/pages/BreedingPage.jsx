@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
 import { horses } from "../data/horses";
+import "../styles/breeding.css";
 
 function Field({ label, children }) {
   return (
-    <label style={{ display: "grid", gap: 6 }}>
+    <label className="breedingField">
       <strong>{label}</strong>
       {children}
     </label>
@@ -14,12 +15,7 @@ function TextInput(props) {
   return (
     <input
       {...props}
-      style={{
-        padding: 10,
-        borderRadius: 10,
-        border: "1px solid #ccc",
-        outline: "none",
-      }}
+      className="breedingInput"
     />
   );
 }
@@ -28,13 +24,7 @@ function TextArea(props) {
   return (
     <textarea
       {...props}
-      style={{
-        padding: 10,
-        borderRadius: 10,
-        border: "1px solid #ccc",
-        outline: "none",
-        resize: "vertical",
-      }}
+      className="breedingTextarea"
     />
   );
 }
@@ -127,19 +117,29 @@ export default function BreedingPage() {
   const stud = studs.find((s) => s.id === form.studId);
 
   return (
-    <div style={{ maxWidth: 760, display: "grid", gap: 14 }}>
-      <h1 style={{ margin: 0 }}>Avel</h1>
+    <div className="breedingPage">
+      <div className="breedingHeader">
+        <div className="horsesLogo">
+          <img src="/images/logo.png" alt="Greyfall Stable" />
+        </div>
+        <h1 className="horsesTitle">Avel</h1>
+      </div>
+      <div>
+        <h2>Beställa semin eller <br />backbreeding?</h2>
 
+        <p>Genom att skicka in betäckningsformuläret godkänner du följande:
+          Greyfall Stable erbjuder betäckning via semin och fribetäckning, samt möjlighet till backbreeding.</p>
+        <ul>
+          <li> Backbreeding innebär att avkomman skapas som redan född, vilket gör att du får en ridbar häst direkt istället för att vänta på föl. Backbreeding erbjuds från och med att hingsten haft sin första fölkull.</li>
+          <li> I formuläret ska hästens registrerade namn anges. För tydlighet rekommenderas att smeknamn, tillägg och alternativa stavningar inte används.</li>
+          <li>Ägare till avkommor efter Greyfall Stables hingstar förväntas vid förfrågan kunna lämna uppdateringar om avkomman, exempelvis kring utveckling, meriter eller vidare avel.</li>
+          <li>Om villkoren inte följs förbehåller sig Greyfall Stable rätten att neka framtida tjänster.</li>
+        </ul>
+        <p> Vid mer info om semin, backbreeding etc rekomederas det att läsa på på <a href="https://blippblopp.weebly.com/avel.html" target="_blank" rel="noopener noreferrer">https://blippblopp.weebly.com/avel.html</a></p>
+      </div>
       <form
         onSubmit={onSubmit}
-        style={{
-          display: "grid",
-          gap: 14,
-          padding: 14,
-          border: "1px solid #ddd",
-          borderRadius: 14,
-          background: "white",
-        }}
+        className="breedingForm"
       >
         {/* 1) SSO / Discord */}
         <Field label="SSO Name">
@@ -158,58 +158,44 @@ export default function BreedingPage() {
           />
         </Field>
 
-    <Field label="Välj hingst">
-  <select
-    value={form.studId}
-    onChange={(e) => update("studId", e.target.value)}
-    style={{ padding: 10, borderRadius: 10, border: "1px solid #ccc" }}
-  >
-    {studs.map((h) => (
-      <option key={h.id} value={h.id}>
-        {h.name}
-      </option>
-    ))}
-  </select>
-</Field>
+        <Field label="Välj hingst">
+          <select
+            value={form.studId}
+            onChange={(e) => update("studId", e.target.value)}
+            className="breedingSelect"
+          >
+            {studs.map((h) => (
+              <option key={h.id} value={h.id}>
+                {h.name}
+              </option>
+            ))}
+          </select>
+        </Field>
 
-{/* ✅ Mode-knappar DIREKT under hingst-rutan */}
-<div style={{ display: "flex", gap: 10, marginTop: 6 }}>
-  <button
-    type="button"
-    onClick={() => setMode("semen")}
-    style={{
-      padding: "10px 14px",
-      borderRadius: 12,
-      border: "1px solid #ccc",
-      background: mode === "semen" ? "#CC9F57" : "white",
-      cursor: "pointer",
-      fontWeight: 700,
-    }}
-  >
-    Semin
-  </button>
+        {/* ✅ Mode-knappar DIREKT under hingst-rutan */}
+        <div className="breedingModeButtons">
+          <button
+            type="button"
+            onClick={() => setMode("semen")}
+            className={`breedingModeButton ${mode === "semen" ? "active" : ""}`}
+          >
+            Semin
+          </button>
 
-  <button
-    type="button"
-    onClick={() => setMode("backbreeding")}
-    style={{
-      padding: "10px 14px",
-      borderRadius: 12,
-      border: "1px solid #ccc",
-      background: mode === "backbreeding" ? "#CC9F57" : "white",
-      cursor: "pointer",
-      fontWeight: 700,
-    }}
-  >
-    Backbreeding
-  </button>
-</div>
+          <button
+            type="button"
+            onClick={() => setMode("backbreeding")}
+            className={`breedingModeButton ${mode === "backbreeding" ? "active" : ""}`}
+          >
+            Backbreeding
+          </button>
+        </div>
 
-{stud && (
-  <div style={{ opacity: 0.85 }}>
-    Vald hingst: <strong>{stud.name}</strong>
-  </div>
-)}
+        {stud && (
+          <div className="selectedStud">
+            Vald hingst: <strong>{stud.name}</strong>
+          </div>
+        )}
         {/* 4) Sto (i samma ordning som bilden) */}
         <Field label="Stoets registrerade namn">
           <TextInput
@@ -281,7 +267,7 @@ export default function BreedingPage() {
             <select
               value={form.breedingMethod}
               onChange={(e) => update("breedingMethod", e.target.value)}
-              style={{ padding: 10, borderRadius: 10, border: "1px solid #ccc" }}
+              className="breedingSelect"
             >
               <option value="">Välj (valfritt)</option>
               <option value="TAI">TAI</option>
@@ -330,7 +316,7 @@ export default function BreedingPage() {
               <select
                 value={form.foalSex}
                 onChange={(e) => update("foalSex", e.target.value)}
-                style={{ padding: 10, borderRadius: 10, border: "1px solid #ccc" }}
+                className="breedingSelect"
               >
                 <option value="">Välj</option>
                 <option value="Sto">Sto</option>
@@ -341,53 +327,32 @@ export default function BreedingPage() {
           </>
         )}
 
-        <Field label="Lägg till ev. bild (valfritt)">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setUpload(e.target.files?.[0] || null)}
-          />
+        <Field label="">
+          <label className="breedingFileButton">
+            Infoga bild
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setUpload(e.target.files?.[0] || null)}
+              style={{ display: 'none' }}
+            />
+          </label>
           {upload && (
-            <div style={{ fontSize: 12, opacity: 0.8 }}>
+            <div className="fileInfo">
               Vald fil: <strong>{upload.name}</strong>
             </div>
           )}
         </Field>
 
-        <Field label="Övrigt (valfritt)">
-          <TextArea
-            rows={3}
-            value={form.notes}
-            onChange={(e) => update("notes", e.target.value)}
-            placeholder="Allt extra du vill säga"
-          />
-        </Field>
-
         <button
           type="submit"
-          style={{
-            padding: 12,
-            borderRadius: 12,
-            border: "none",
-            background: "#c69c5d",
-            color: "white",
-            fontWeight: 800,
-            cursor: "pointer",
-            marginTop: 8,
-          }}
+          className="breedingSubmitButton"
         >
           Skicka
         </button>
 
         {status.type !== "idle" && (
-          <div
-            style={{
-              padding: 10,
-              borderRadius: 10,
-              border: "1px solid #ddd",
-              background: status.type === "success" ? "CC9F57" : "#ffffff",
-            }}
-          >
+          <div className={`breedingStatus ${status.type}`}>
             {status.text}
           </div>
         )}

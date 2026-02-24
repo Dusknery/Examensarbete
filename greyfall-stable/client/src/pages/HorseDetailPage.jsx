@@ -1,137 +1,221 @@
 import { Link, useParams } from "react-router-dom";
 import { horses } from "../data/horses";
-
-function Row({ label, value }) {
-  return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "160px 1fr",
-        gap: 10,
-        padding: "6px 0",
-        borderBottom: "1px solid #eee",
-      }}
-    >
-      <strong>{label}</strong>
-      <span>{value || "-"}</span>
-    </div>
-  );
-}
+import "../styles/HorseDetail.css";
 
 export default function HorseDetailPage() {
   const { id } = useParams();
 
-  const horse = horses.find((h) => h.id === id);
+  const horse = horses.find((h) => String(h.id) === String(id));
 
   if (!horse) {
     return <p>Häst hittades inte</p>;
   }
 
-  // Avkommor: alla hästar där denna häst är far eller mor
   const offspring = horses.filter(
     (h) => h.sireId === horse.id || h.damId === horse.id
   );
 
+  const mainImageUrl = horse.imageUrl;
+  const bodyshotUrl = horse.images?.bodyshot;
+  const pedigreeUrl = horse.images?.pedigree;
+
   return (
-    <div style={{ display: "grid", gap: 16 }}>
-      <Link to="/hastar" style={{ textDecoration: "none" }}>
+    <div className="horseDetailPage">
+      <Link to="/hastar" className="backLink">
         ← Tillbaka till hästar
       </Link>
 
-      <h1 style={{ margin: 0 }}>{horse.name}</h1>
-      <div style={{ opacity: 0.8 }}>
-        {horse.breed} • {horse.ageText} • {horse.sex}
+      <div className="horseDetailHeader">
+        <div className="horseDetailLogo">
+          <img src="/images/logo.png" alt="Greyfall Stable" />
+        </div>
+        <h1 className="horseDetailTitle">{horse.name}</h1>
       </div>
 
-      {/* Bild placeholder */}
-      <div
-        style={{
-          height: 300,
-          background: "#eee",
-          borderRadius: 16,
-        }}
-      />
+      <div className="horseMainSection">
+        <div className="horseHeadshotWrapper">
+          {mainImageUrl ? (
+            <img src={mainImageUrl} alt={horse.name} className="horseHeadshot" />
+          ) : (
+            <div
+              style={{
+                width: "100%",
+                height: 280,
+                background: "#333",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#999",
+              }}
+            >
+              Ingen bild
+            </div>
+          )}
+        </div>
 
-      {/* Fakta */}
-      <div
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: 14,
-          padding: 12,
-          background: "white",
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>Fakta</h2>
+        <div className="horseInfo">
+          <div className="horseBasicInfo">
+            {horse.nickname && <div>{horse.nickname}</div>}
+            {horse.breed && <div>{horse.breed}</div>}
+            {horse.year && <div>Född {horse.year}</div>}
+            {horse.sex && <div>{horse.sex}</div>}
+          </div>
 
-        <Row label="Fader (E)" value={horse.pedigree?.e} />
-        <Row label="Moder (U)" value={horse.pedigree?.u} />
-        <Row label="Morfar (UE)" value={horse.pedigree?.ue} />
-        <Row label="Farfar (EE)" value={horse.pedigree?.ee} />
+          <div className="horsePedigreeInfo">
+            {horse.pedigree?.e && <div>E - {horse.pedigree.e}</div>}
+            {horse.pedigree?.u && <div>U - {horse.pedigree.u}</div>}
+            {horse.pedigree?.ue && <div>UE - {horse.pedigree.ue}</div>}
+          </div>
 
-        <Row label="Inriktning" value={(horse.focus || []).join(", ")} />
-        <Row label="Dressyr" value={horse.levels?.dressyr} />
-        <Row label="Hopp" value={horse.levels?.hopp} />
-        <Row label="Terräng" value={horse.levels?.terrang} />
+          <div className="horseDetailsInfo">
+            {horse.focus && horse.focus.length > 0 && (
+              <div>Inriktning: {horse.focus.join(", ")}</div>
+            )}
+            {horse.levels?.dressyr && <div>Dressyrnivå: {horse.levels.dressyr}</div>}
+            {horse.levels?.hopp && <div>Hoppnivå: {horse.levels.hopp}</div>}
+            {horse.levels?.terrang && <div>Terrängnivå: {horse.levels.terrang}</div>}
+            {horse.other?.mkh && <div>Mkh: {horse.other.mkh} cm</div>}
+            {horse.other?.country && <div>Ursprungsland: {horse.other.country}</div>}
+          </div>
 
-        <Row label="Mkh" value={horse.other?.mkh} />
-        <Row label="Land" value={horse.other?.country} />
+          {horse.genetics && (
+            <div className="horseGeneticsInfo">
+              <div>Genetik: {horse.genetics}</div>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Genetik */}
-      <div
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: 14,
-          padding: 12,
-          background: "white",
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>Genetik</h2>
-        <div>{horse.genetics || "-"}</div>
-      </div>
-
-      {/* Beskrivning */}
-      {horse.description && (
-        <div
-          style={{
-            border: "1px solid #ddd",
-            borderRadius: 14,
-            padding: 12,
-            background: "white",
-          }}
-        >
-          <h2 style={{ marginTop: 0 }}>Beskrivning</h2>
-          <p style={{ whiteSpace: "pre-wrap" }}>{horse.description}</p>
+  {horse.description && (
+        <div className="horseDescription">
+          <p>{horse.description}</p>
         </div>
       )}
 
-      {/* Avkommor */}
-      {(offspring.length > 0 || horse.extraOffspringNote) && (
-        <div
-          style={{
-            border: "1px solid #ddd",
-            borderRadius: 14,
-            padding: 12,
-            background: "white",
-          }}
-        >
-          <h2 style={{ marginTop: 0 }}>Avkommor</h2>
+      {bodyshotUrl ? (
+        <div className="horseBodyshot">
+          <img src={bodyshotUrl} alt={`${horse.name} helkropp`} />
+        </div>
+      ) : (
+        <div className="horseBodyshot">
+          <div
+            style={{
+              width: "100%",
+              minHeight: 350,
+              padding: 40,
+              textAlign: "center",
+              background: "#eee",
+              borderRadius: 12,
+              color: "#666",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            Ingen Helkroppsbild uppladdad
+          </div>
+        </div>
+      )}
 
-          {offspring.length > 0 ? (
-            <div style={{ display: "grid", gap: 8 }}>
-              {offspring.map((child) => (
-                <div key={child.id}>
-                  <strong>{child.name}</strong> – {child.breed}, {child.ageText},{" "}
-                  {child.sex}{" "}
-                  <Link to={`/hastar/${child.id}`}>Mer info</Link>
-                </div>
-              ))}
+
+        {pedigreeUrl ? (
+          <div className="horsePedigreeImage">
+            <img src={pedigreeUrl} alt={`${horse.name} stamtavla`} />
+          </div>
+        ) : (
+          <div className="horsePedigreeImage">
+            <div
+              style={{
+                width: "100%",
+                minHeight: 350,
+                padding: 40,
+                textAlign: "center",
+                background: "#eee",
+                borderRadius: 12,
+                color: "#666",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              Ingen stamtavlebild uppladdad
             </div>
-          ) : (
-            <p>Inga avkommor inlagda.</p>
-          )}
+          </div>
+        )}
+        
+      {(offspring.length > 0 || horse.offspring?.length > 0) && (
+        <div className="horseOffspring">
+          <h2>Avkommor</h2>
 
-          {horse.extraOffspringNote && <p>{horse.extraOffspringNote}</p>}
+          <div className="offspringGrid">
+            {offspring.map((child) => (
+              <div key={child.id} className="offspringCard">
+                {child.imageUrl ? (
+                  <img src={child.imageUrl} alt={child.name} />
+                ) : (
+                  <div
+                    style={{
+                      width: 220,
+                      height: 220,
+                      background: "#eee",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "0.8em",
+                      color: "#999",
+                    }}
+                  >
+                    Ingen bild
+                  </div>
+                )}
+
+                <div className="offspringInfo">
+                  <h3>{child.name}</h3>
+                  {child.breed && <p>{child.breed}</p>}
+                  {child.year && <p>{child.year}</p>}
+                  {child.sex && <p>{child.sex}</p>}
+                  
+                  {child.pedigree?.e && <p>E - {child.pedigree.e}</p>}
+                  {child.pedigree?.u && <p>U - {child.pedigree.u}</p>}
+                  {child.pedigree?.ue && <p>UE - {child.pedigree.ue}</p>}
+                </div>
+
+                <Link to={`/hastar/${child.id}`} className="offspringLink">
+                  Mer info
+                </Link>
+              </div>
+            ))}
+
+            {horse.offspring?.map((child, idx) => (
+              <div key={idx} className="offspringCard">
+                {child.imageUrl ? (
+                  <img src={child.imageUrl} alt={child.name || "Avkomma"} />
+                ) : (
+                  <div
+                    style={{
+                      width: 220,
+                      height: 220,
+                      background: "#eee",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "0.8em",
+                      color: "#999",
+                    }}
+                  >
+                    Ingen bild
+                  </div>
+                )}
+
+                <div className="offspringInfo">
+                  <h3>{child.name || "Avkomma"}</h3>
+                  <p>{child.info || ""}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

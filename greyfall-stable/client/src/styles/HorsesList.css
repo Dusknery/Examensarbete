@@ -1,0 +1,134 @@
+.horsesListPage {
+  padding: 40px 40px 0 40px;
+}
+
+.horsesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  margin-bottom: 60px;
+  padding: 40px 0;
+  transform: translateX(-60px);
+}
+
+.horsesLogo {
+  width: 300px;
+  height: 300px;
+  transform: translateX(30px);
+}
+
+.horsesLogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.horsesTitle {
+  font-size: 48px;
+  font-weight: 400;
+  color: #000000;
+  font-family: Georgia, serif;
+  margin: 0;
+  transform: translateX(45px);
+}
+
+.horsesGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+  margin-bottom: 40px;
+  max-width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.horseCard {
+  position: relative;
+  text-decoration: none;
+  transition: transform 0.2s;
+  overflow: hidden;
+}
+
+.horseCard:hover {
+  transform: translateY(-4px);
+}
+
+.horseCard img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  display: block;
+}
+
+.horseName {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: Georgia, serif;
+  padding: 15px 10px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.horsesFooterImage {
+  max-width: 1400px;
+  margin: 0 auto;
+  margin-bottom: 40px;
+  height: 380px;
+  overflow: hidden;
+}
+
+.horsesFooterImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20px;
+  display: block;
+}
+
+@media (max-width: 1500px) {    
+  .horsesGrid {
+    grid-template-columns: repeat(4, 1fr);
+      max-width: 850px;
+  }
+  
+  .horsesFooterImage {
+    width: 100vw;
+    margin-left: -40px;
+    max-width: none;
+  }
+  
+}
+
+@media (max-width: 900px) {
+  .horsesGrid {
+    grid-template-columns: repeat(3, 1fr);
+          max-width: 850px;
+
+  }
+}
+
+@media (max-width: 650px) {
+  .horsesGrid {
+    grid-template-columns: repeat(2, 1fr);
+          max-width: 850px;
+
+  }
+  
+  .horsesHeader {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .horsesListPage {
+    padding: 20px;
+  }
+}
