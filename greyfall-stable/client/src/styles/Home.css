@@ -1,118 +1,223 @@
 .home {
   display: grid;
-  gap: 16px;
+  gap: 40px;
+  padding-bottom: 40px;
+  margin: 0;
 }
 
+/* Hero Section */
 .hero {
   position: relative;
-  border-radius: 14px;
+  width: 100%;
+  height: 300px;
   overflow: hidden;
-  border: 1px solid #ddd;
+  border-radius: 0;
+  margin: 0;
+}
+
+@media (min-width: 1400px) {
+  .hero {
+    height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    height: 250px;
+  }
 }
 
 .hero img {
   width: 100%;
-  height: 260px;
+  height: 100%;
   object-fit: cover;
+  object-position: center top;
   display: block;
 }
 
 .heroTitle {
   position: absolute;
-  right: 18px;
-  top: 18px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.35);
+  top: 50%;
+  right: 15%;
+  transform: translateY(-50%);
+  font-family: 'Water Brush', cursive;
+  font-size: 80px;
   color: white;
-  font-size: 28px;
-  font-weight: 600;
+  margin: 0;
+  font-weight: normal;
+  line-height: 1;
 }
 
-.introRow {
+@media (min-width: 1400px) {
+  .heroTitle {
+    right: 25%;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 56px;
+    right: 10%;
+  }
+}
+
+/* Intro Section */
+.introSection {
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 40px;
+}
+
+.introBox {
   display: grid;
-  grid-template-columns: 90px 1fr;
-  gap: 14px;
+  grid-template-columns: 250px 1fr;
+  gap: 40px;
   align-items: center;
 }
 
-.logoBox {
-  width: 90px;
-  height: 90px;
-  border-radius: 999px;
-  border: 1px solid #ddd;
-  background: white;
+.introImage {
+  width: 250px;
+  height: 250px;
   overflow: hidden;
-  display: grid;
-  place-items: center;
 }
 
-.logoBox img {
+.introImage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.newsShell {
-  border: 2px solid #caa55a; /* “gul ram” (kan bytas mot exakt färg senare) */
-  border-radius: 14px;
-  background: #fff;
-  padding: 12px;
+.introText {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #000000;
+  font-family: Georgia, serif;
+}
+
+.introText p {
+  margin: 0;
+}
+
+/* News Section */
+.newsSection {
+  max-width: 100%;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 60px;
 }
 
 .newsHeader {
   text-align: center;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  margin: 6px 0 12px;
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  margin: 0 0 40px 0;
+  color: #000000;
+  font-family: 'Montserrat Subrayada', sans-serif;
 }
 
-.newsScroller {
-  height: 520px;            /* scroll-yta */
-  overflow-y: auto;
-  padding-right: 8px;
+.newsGrid {
+  background: #F2DDBB;
+  padding: 30px 40px;
   display: grid;
-  gap: 14px;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  max-height: 800px;
+  overflow-y: auto;
 }
 
 .newsCard {
-  border: 1px solid #e5d8b8;
-  border-radius: 12px;
-  background: #f3e3c1;      /* “gul” kortbakgrund-ish */
-  padding: 12px;
+  background: white;
+  padding: 40px;
+  transition: transform 0.2s;
+}
+
+.newsCard:hover {
+  transform: translateY(-2px);
+}
+
+.newsCardInner {
   display: grid;
-  gap: 10px;
+  gap: 16px;
 }
 
 .newsTitle {
-  font-weight: 700;
+  font-size: 32px;
+  font-weight: 400;
   text-align: center;
+  margin: 0;
+  color: #000000;
+  font-family: 'Suwannaphum', serif;
 }
 
 .newsBody {
-  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.6;
   text-align: center;
+  color: #000000;
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: 'Cormorant Infant', serif;
 }
 
 .newsImage {
   width: 100%;
-  max-height: 260px;
+  height: auto;
+  max-height: 400px;
   object-fit: cover;
-  border-radius: 10px;
-  border: 1px solid #e5d8b8;
+  display: block;
 }
 
 .newsLink {
   text-align: center;
+  margin-top: 8px;
 }
 
 .newsLink a {
-  color: inherit;
-  font-weight: 600;
+  color: #2292F2;
+  font-weight: 400;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+  font-family: 'Cormorant Infant', serif;
 }
 
-.smallMeta {
+.newsLink a:hover {
+  text-decoration: underline;
+}
+
+.newsDate {
   text-align: center;
-  opacity: 0.7;
   font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  font-family: 'Cormorant Infant', serif;
+}
+
+.error-message {
+  text-align: center;
+  color: #d9534f;
+  padding: 12px;
+  background: #f8d7da;
+  border-radius: 8px;
+  border: 1px solid #f5c6cb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 40px;
+    right: 40px;
+  }
+  
+  .introBox {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 24px;
+  }
+  
+  .introImageBox {
+    margin: 0 auto;
+  }
 }

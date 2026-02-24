@@ -1,0 +1,344 @@
+/* Stallions Page Styles */
+
+.stallionsPage {
+    display: grid;
+    gap: 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 80px 40px;
+}
+
+.stallionsHero {
+    position: relative;
+    height: 320px;
+    background: url('/images/avelshastar.png');
+    background-size: cover;
+    background-position: center top;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 0;
+    padding-left: 80px;
+    margin: 0 -40px;
+}
+
+.stallionsHero h1 {
+    color: black;
+    font-size: 48px;
+    font-weight: 400;
+    font-family: Georgia, serif;
+    margin: 0;
+}
+
+.stallionsIntro {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 40px 30px 40px;
+    border-bottom: 1px solid #c69c5d;
+}
+
+.stallionsIntroImage {
+    width: 300px;
+    height: 300px;
+    border-radius: 16px;
+    object-fit: cover;
+}
+
+.stallionsIntroText {
+    font-family: Georgia, serif;
+    line-height: 1.8;
+    color: black;
+    font-size: 14px;
+}
+
+.stallionsIntroText p {
+    margin: 0 0 16px 0;
+}
+
+.stallionCard {
+    display: grid;
+    gap: 30px;
+    width: 100%;
+    justify-items: center;
+    border-bottom: 1px solid #c69c5d;
+    padding-bottom: 60px;
+}
+
+.stallionCard:last-child {
+    border-bottom: none;
+}
+
+.stallionMain {
+    display: grid;
+    grid-template-columns: 750px 450px;
+    gap: 30px;
+    align-items: start;
+}
+
+.stallionLeft {
+    display: grid;
+    gap: 20px;
+    transform: translateX(-300px) translateY(-40px);
+}
+
+.stallionImage {
+    width: 1000px;
+    height: 600px;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+.stallionInfo {
+    display: grid;
+    gap: 8px;
+    margin-left: 30px;
+    transform: translateY(-30px);
+}
+
+.stallionName {
+    font-size: 28px;
+    font-weight: 400;
+    font-family: Georgia, serif;
+    margin: 0;
+    color: black;
+}
+
+.stallionBreed {
+    font-size: 18px;
+    font-family: Georgia, serif;
+    color: #666;
+}
+
+.stallionBasicInfo {
+    display: grid;
+    gap: 4px;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    color: black;
+}
+
+.stallionPedigreeInfo {
+    display: grid;
+    gap: 4px;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    color: black;
+    margin-top: 12px;
+}
+
+.stallionDetailsInfo {
+    display: grid;
+    gap: 4px;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    color: black;
+    margin-top: 12px;
+}
+
+.stallionGenetics {
+    display: grid;
+    gap: 4px;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    color: black;
+    margin-top: 12px;
+}
+
+.stallionButton {
+    padding: 16px 90px;
+    border-radius: 12px;
+    border: none;
+    background: #c69c5d;
+    color: black;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: Georgia, serif;
+    transition: opacity 0.2s, padding 0.3s ease, margin 0.3s ease, transform 0.3s ease;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    margin: 40px auto;
+    width: fit-content;
+    transform: translateX(-50px);
+}
+
+.stallionButton:hover {
+    opacity: 0.9;
+}
+
+.pedigreeSection {
+    display: grid;
+    gap: 0;
+}
+
+.pedigreeImage {
+    width: 85%;
+    display: block;
+    border-radius: 0;
+    max-height: 475px;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+.pedigreePlaceholder {
+    width: 85%;
+    height: 475px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ddd;
+    border-radius: 0;
+    color: #666;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    margin: 0 auto;
+}
+
+.offspringSection {
+    display: grid;
+    gap: 16px;
+    margin-top: 60px;
+    transform: translateX(-50px);
+    transition: margin-top 0.3s ease, transform 0.3s ease;
+}
+
+.offspringTitle {
+    font-size: 22px;
+    font-weight: 700;
+    font-family: Georgia, serif;
+    color: black;
+    text-align: center;
+    transition: font-size 0.3s ease;
+}
+
+.offspringImagesTwo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+.offspringImages {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    justify-items: center;
+}
+
+.offspringImages img:only-child {
+    grid-column: 1 / -1;
+}
+
+.offspringImages img:nth-last-child(1):nth-child(odd) {
+    grid-column: 1 / -1;
+}
+
+.offspringImage {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+@media (max-width: 1800px) {
+    .stallionMain {
+        grid-template-columns: 650px 450px;
+    }
+
+    .stallionLeft {
+        transform: translateX(-100px) translateY(-40px);
+    }
+
+    .stallionImage {
+        width: 750px;
+        height: 485px;
+    }
+
+    .stallionInfo {
+        transform: translateY(-20px);
+    }
+
+    .pedigreeImage {
+        width: 77.5%;
+        max-height: 360px;
+    }
+
+    .pedigreePlaceholder {
+        width: 77.5%;
+        height: 360px;
+    }
+
+    .stallionButton {
+        margin: 30px auto;
+        padding: 16px 65px;
+        transform: translateX(-20px);
+    }
+
+    .offspringSection {
+        margin-top: 40px;
+        transform: translateX(-20px);
+    }
+
+    .offspringTitle {
+        font-size: 20px;
+    }
+
+    .offspringImage {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media (max-width: 1500px) {
+    .stallionMain {
+        grid-template-columns: 550px 450px;
+    }
+
+    .stallionLeft {
+        transform: translateX(0);
+    }
+
+    .stallionImage {
+        height: 350px;
+        width: 100%;
+    }
+
+    .stallionInfo {
+        transform: translateY(0);
+    }
+
+    .pedigreeImage {
+        width: 70%;
+        max-height: 240px;
+    }
+
+    .pedigreePlaceholder {
+        width: 70%;
+        height: 240px;
+    }
+
+    .stallionButton {
+        margin: 20px auto;
+        padding: 16px 40px;
+        transform: translateX(0);
+    }
+
+    .offspringSection {
+        margin-top: 20px;
+        transform: translateX(0);
+    }
+
+    .offspringTitle {
+        font-size: 18px;
+    }
+
+    .offspringImage {
+        width: 180px;
+        height: 180px;
+    }
+}

@@ -1,0 +1,298 @@
+.horseDetailPage {
+  padding: 40px 60px 0;
+}
+
+.horseDetailHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+}
+
+.horseDetailLogo {
+  width: 350px;
+  height: 350px;
+  margin-bottom: 40px;
+}
+
+.horseDetailLogo img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.horseDetailTitle {
+  font-size: 32px;
+  font-weight: 400;
+  color: #000000;
+  font-family: Georgia, serif;
+  margin: 0;
+}
+
+.horseMainSection {
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 550px 1fr;
+  gap: 140px;
+  margin-bottom: 40px;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  transform: translateX(100px);
+  transition: transform 0.3s ease;
+}
+
+.horseHeadshotWrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  overflow: hidden;
+  transform: translateX(80px);
+  transition: transform 0.3s ease;
+}
+
+.horseHeadshot {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.horseInfo {
+  display: grid;
+  gap: 4px;
+  color: black;
+  transition: transform 0.3s ease;
+}
+
+.horseBasicInfo {
+  display: grid;
+  gap: 4px;
+  font-family: Georgia, serif;
+  font-size: 16px;
+  color: black;
+}
+
+.horsePedigreeInfo {
+  display: grid;
+  gap: 4px;
+  font-family: Georgia, serif;
+  font-size: 16px;
+  color: black;
+  margin-top: 12px;
+}
+
+.horseDetailsInfo {
+  display: grid;
+  gap: 4px;
+  font-family: Georgia, serif;
+  font-size: 16px;
+  color: black;
+  margin-top: 12px;
+}
+
+.horseGeneticsInfo {
+  display: grid;
+  gap: 4px;
+  font-family: Georgia, serif;
+  font-size: 16px;
+  color: black;
+  margin-top: 12px;
+}
+
+.horseDescription {
+  padding: 30px 40px;
+  margin-bottom: 40px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.horseDescription p {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.7;
+  color: #000000;
+  font-family: Georgia, serif;
+  font-size: 15px;
+}
+
+.horseBodyshot {
+  margin-bottom: 40px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.horseBodyshot img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+.horsePedigree {
+  margin-bottom: 40px;
+}
+
+.horsePedigree h2 {
+  font-size: 24px;
+  font-weight: 400;
+  margin: 0 0 20px 0;
+  font-family: Georgia, serif;
+  text-align: center;
+}
+
+.horsePedigreeImage {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.horsePedigreeImage img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+.noPedigree {
+  width: 100%;
+  padding: 40px;
+  text-align: center;
+  background: #eee;
+  border-radius: 12px;
+  color: #666;
+  font-family: Georgia, serif;
+}
+
+.horseOffspring {
+  padding: 30px 40px;
+  margin-bottom: 60px;
+}
+
+.horseOffspring h2 {
+  font-size: 24px;
+  font-weight: 400;
+  margin: 0 0 40px 0;
+  font-family: Georgia, serif;
+  text-align: center;
+}
+
+.offspringGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.offspringGrid .offspringCard {
+  flex: 0 0 calc((100% - 40px) / 5);
+}
+
+@media (max-width: 1800px) {
+  .offspringGrid .offspringCard {
+    flex: 0 0 calc((100% - 30px) / 4);
+  }
+}
+
+@media (max-width: 1500px) {
+  .offspringGrid .offspringCard {
+    flex: 0 0 calc((100% - 20px) / 3);
+  }
+}
+
+.offspringCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 0;
+}
+
+.offspringCard img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+@media (max-width: 1500px) {
+  .offspringCard img {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+.offspringInfo h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 400;
+  font-family: Georgia, serif;
+  text-align: center;
+}
+
+.offspringInfo p {
+  margin: 0 0 12px 0;
+  opacity: 0.8;
+  font-size: 14px;
+  font-family: Georgia, serif;
+  text-align: left;
+}
+
+.offspringLink {
+  padding: 10px 20px;
+  background: #CC9F57;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-family: Georgia, serif;
+  transition: background 0.2s;
+  display: inline-block;
+}
+
+.offspringLink:hover {
+  background: #b8884a;
+}
+
+.backLink {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #CC9F57;
+  text-decoration: none;
+  font-family: Georgia, serif;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1500px) {
+  .horseMainSection {
+    transform: translateX(0);
+  }
+  
+  .horseHeadshotWrapper {
+    transform: translateX(0);
+  }
+  
+  .horseInfo {
+    transform: translateX(-100px);
+  }
+}
+
+@media (max-width: 768px) {
+  .horseMainSection {
+    grid-template-columns: 1fr;
+  }
+
+  .offspringCard {
+    grid-template-columns: 1fr;
+  }
+
+  .horseDetailPage {
+    padding: 20px;
+  }
+}
