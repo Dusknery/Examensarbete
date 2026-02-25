@@ -1,19 +1,70 @@
 import { Link, useParams } from "react-router-dom";
-import { horses } from "../data/horses";
+import { useEffect, useMemo, useState } from "react";
+import { getHorseById, getHorses } from "../services/api";
 import "../styles/HorseDetail.css";
 
 export default function HorseDetailPage() {
   const { id } = useParams();
 
-  const horse = horses.find((h) => String(h.id) === String(id));
+  const [horse, setHorse] = useState(null);
+  const [allHorses, setAllHorses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let alive = true;
+
+    (async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const h = await getHorseById(id);
+        if (!alive) return;
+        setHorse(h);
+
+        const list = await getHorses();
+        if (!alive) return;
+        setAllHorses(list);
+      } catch (e) {
+        if (!alive) return;
+        setError(e.message || "Kunde inte hämta hästen");
+      } finally {
+        if (!alive) return;
+        setLoading(false);
+      }
+    })();
+
+    return () => {
+      alive = false;
+    };
+  }, [id]);
+
+  const offspring = useMemo(() => {
+    if (!horse?.id || !allHorses?.length) return [];
+
+    // Stöd för båda varianter:
+    // 1) sireId/damId (om du lägger till dem i schema)
+    // 2) pedigree.eId/pedigree.uId (rekommenderat)
+    return allHorses.filter((h) => {
+      const byLegacy = h?.sireId === horse.id || h?.damId === horse.id;
+      const byPedigreeIds =
+        h?.pedigree?.eId === horse.id || h?.pedigree?.uId === horse.id;
+      return byLegacy || byPedigreeIds;
+    });
+  }, [horse, allHorses]);
+
+  if (loading) return <div style={{ padding: 20 }}>Laddar...</div>;
+  if (error)
+    return (
+      <div style={{ padding: 20, color: "crimson" }}>
+        {error}
+      </div>
+    );
 
   if (!horse) {
     return <p>Häst hittades inte</p>;
   }
-
-  const offspring = horses.filter(
-    (h) => h.sireId === horse.id || h.damId === horse.id
-  );
 
   const mainImageUrl = horse.imageUrl;
   const bodyshotUrl = horse.images?.bodyshot;
@@ -35,7 +86,11 @@ export default function HorseDetailPage() {
       <div className="horseMainSection">
         <div className="horseHeadshotWrapper">
           {mainImageUrl ? (
-            <img src={mainImageUrl} alt={horse.name} className="horseHeadshot" />
+            <img
+              src={mainImageUrl}
+              alt={horse.name}
+              className="horseHeadshot"
+            />
           ) : (
             <div
               style={{
@@ -71,11 +126,17 @@ export default function HorseDetailPage() {
             {horse.focus && horse.focus.length > 0 && (
               <div>Inriktning: {horse.focus.join(", ")}</div>
             )}
-            {horse.levels?.dressyr && <div>Dressyrnivå: {horse.levels.dressyr}</div>}
+            {horse.levels?.dressyr && (
+              <div>Dressyrnivå: {horse.levels.dressyr}</div>
+            )}
             {horse.levels?.hopp && <div>Hoppnivå: {horse.levels.hopp}</div>}
-            {horse.levels?.terrang && <div>Terrängnivå: {horse.levels.terrang}</div>}
+            {horse.levels?.terrang && (
+              <div>Terrängnivå: {horse.levels.terrang}</div>
+            )}
             {horse.other?.mkh && <div>Mkh: {horse.other.mkh} cm</div>}
-            {horse.other?.country && <div>Ursprungsland: {horse.other.country}</div>}
+            {horse.other?.country && (
+              <div>Ursprungsland: {horse.other.country}</div>
+            )}
           </div>
 
           {horse.genetics && (
@@ -86,7 +147,7 @@ export default function HorseDetailPage() {
         </div>
       </div>
 
-  {horse.description && (
+      {horse.description && (
         <div className="horseDescription">
           <p>{horse.description}</p>
         </div>
@@ -117,32 +178,31 @@ export default function HorseDetailPage() {
         </div>
       )}
 
+      {pedigreeUrl ? (
+        <div className="horsePedigreeImage">
+          <img src={pedigreeUrl} alt={`${horse.name} stamtavla`} />
+        </div>
+      ) : (
+        <div className="horsePedigreeImage">
+          <div
+            style={{
+              width: "100%",
+              minHeight: 350,
+              padding: 40,
+              textAlign: "center",
+              background: "#eee",
+              borderRadius: 12,
+              color: "#666",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            Ingen stamtavlebild uppladdad
+          </div>
+        </div>
+      )}
 
-        {pedigreeUrl ? (
-          <div className="horsePedigreeImage">
-            <img src={pedigreeUrl} alt={`${horse.name} stamtavla`} />
-          </div>
-        ) : (
-          <div className="horsePedigreeImage">
-            <div
-              style={{
-                width: "100%",
-                minHeight: 350,
-                padding: 40,
-                textAlign: "center",
-                background: "#eee",
-                borderRadius: 12,
-                color: "#666",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              Ingen stamtavlebild uppladdad
-            </div>
-          </div>
-        )}
-        
       {(offspring.length > 0 || horse.offspring?.length > 0) && (
         <div className="horseOffspring">
           <h2>Avkommor</h2>
@@ -175,7 +235,7 @@ export default function HorseDetailPage() {
                   {child.breed && <p>{child.breed}</p>}
                   {child.year && <p>{child.year}</p>}
                   {child.sex && <p>{child.sex}</p>}
-                  
+
                   {child.pedigree?.e && <p>E - {child.pedigree.e}</p>}
                   {child.pedigree?.u && <p>U - {child.pedigree.u}</p>}
                   {child.pedigree?.ue && <p>UE - {child.pedigree.ue}</p>}

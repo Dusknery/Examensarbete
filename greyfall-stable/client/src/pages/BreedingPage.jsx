@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { horses } from "../data/horses";
+import { useEffect, useMemo, useState } from "react";
+import { getStudHorses } from "../services/api";
 import "../styles/breeding.css";
 
 function Field({ label, children }) {
@@ -12,32 +12,25 @@ function Field({ label, children }) {
 }
 
 function TextInput(props) {
-  return (
-    <input
-      {...props}
-      className="breedingInput"
-    />
-  );
+  return <input {...props} className="breedingInput" />;
 }
 
 function TextArea(props) {
-  return (
-    <textarea
-      {...props}
-      className="breedingTextarea"
-    />
-  );
+  return <textarea {...props} className="breedingTextarea" />;
 }
 
 export default function BreedingPage() {
-  const studs = useMemo(() => horses.filter((h) => h.isStud), []);
+  const [studs, setStuds] = useState([]);
+  const [studsLoading, setStudsLoading] = useState(true);
+  const [studsError, setStudsError] = useState("");
+
   const [mode, setMode] = useState("semen"); // "semen" | "backbreeding"
 
   const [form, setForm] = useState({
     // Ägare
     ssoName: "",
     discord: "",
-    studId: studs[0]?.id || "",
+    studId: "",
 
     // Sto
     mareRegisteredName: "",
@@ -49,15 +42,15 @@ export default function BreedingPage() {
     mareDamsire: "",
     mareOwner: "",
 
-    // Semin (enligt bilden)
-    backbreedingOffspring: "",
+    // Semin
+    breedingMethod: "",
 
-    // Backbreeding (fölinfo enligt bilden)
+    // Backbreeding (fölinfo)
     foalRegisteredName: "",
     foalBreed: "",
     foalBirthYear: "",
     foalColor: "",
-    foalSex: "", // Sto / Hingst / Valack (om du vill ha)
+    foalSex: "",
 
     // Övrigt
     notes: "",
@@ -65,6 +58,39 @@ export default function BreedingPage() {
 
   const [upload, setUpload] = useState(null); // File
   const [status, setStatus] = useState({ type: "idle", text: "" });
+
+  useEffect(() => {
+    let alive = true;
+
+    (async () => {
+      try {
+        setStudsLoading(true);
+        setStudsError("");
+
+        const data = await getStudHorses();
+        if (!alive) return;
+
+        const list = Array.isArray(data) ? data : [];
+        setStuds(list);
+
+        // sätt default studId när listan kommer in
+        setForm((prev) => ({
+          ...prev,
+          studId: prev.studId || list[0]?.id || "",
+        }));
+      } catch (e) {
+        if (!alive) return;
+        setStudsError(e.message || "Kunde inte hämta hingstar");
+      } finally {
+        if (!alive) return;
+        setStudsLoading(false);
+      }
+    })();
+
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   function update(key, value) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -74,18 +100,15 @@ export default function BreedingPage() {
     if (!form.ssoName.trim()) return "Fyll i SSO-namn.";
     if (!form.discord.trim()) return "Fyll i Discord.";
     if (!form.studId) return "Välj hingst.";
-    if (!form.mareRegisteredName.trim()) return "Fyll i stoets registrerade namn.";
+    if (!form.mareRegisteredName.trim())
+      return "Fyll i stoets registrerade namn.";
     if (!form.mareBreed.trim()) return "Fyll i stoets ras.";
     if (!form.mareBirthYear.trim()) return "Fyll i stoets födelseår.";
     if (!form.mareColor.trim()) return "Fyll i stoets färg.";
 
-    if (mode === "semen") {
-      // om du vill kräva denna:
-      // if (!form.backbreedingOffspring.trim()) return "Välj backbreedingavkomma.";
-    }
-
     if (mode === "backbreeding") {
-      if (!form.foalRegisteredName.trim()) return "Fyll i fölets registrerade namn.";
+      if (!form.foalRegisteredName.trim())
+        return "Fyll i fölets registrerade namn.";
       if (!form.foalBreed.trim()) return "Fyll i fölets ras.";
       if (!form.foalBirthYear.trim()) return "Fyll i fölets födelseår.";
       if (!form.foalColor.trim()) return "Fyll i fölets färg.";
@@ -106,7 +129,9 @@ export default function BreedingPage() {
     const payload = {
       mode,
       ...form,
-      upload: upload ? { name: upload.name, type: upload.type, size: upload.size } : null,
+      upload: upload
+        ? { name: upload.name, type: upload.type, size: upload.size }
+        : null,
     };
 
     console.log("BREEDING REQUEST:", payload);
@@ -114,7 +139,10 @@ export default function BreedingPage() {
     setStatus({ type: "success", text: "Skickat! Förfrågan är inskickad." });
   }
 
-  const stud = studs.find((s) => s.id === form.studId);
+  const stud = useMemo(
+    () => studs.find((s) => s.id === form.studId),
+    [studs, form.studId]
+  );
 
   return (
     <div className="breedingPage">
@@ -124,23 +152,55 @@ export default function BreedingPage() {
         </div>
         <h1 className="horsesTitle">Avel</h1>
       </div>
-      <div>
-        <h2>Beställa semin eller <br />backbreeding?</h2>
 
-        <p>Genom att skicka in betäckningsformuläret godkänner du följande:
-          Greyfall Stable erbjuder betäckning via semin och fribetäckning, samt möjlighet till backbreeding.</p>
+      <div>
+        <h2>
+          Beställa semin eller <br />
+          backbreeding?
+        </h2>
+
+        <p>
+          Genom att skicka in betäckningsformuläret godkänner du följande:
+          Greyfall Stable erbjuder betäckning via semin och fribetäckning, samt
+          möjlighet till backbreeding.
+        </p>
+
         <ul>
-          <li> Backbreeding innebär att avkomman skapas som redan född, vilket gör att du får en ridbar häst direkt istället för att vänta på föl. Backbreeding erbjuds från och med att hingsten haft sin första fölkull.</li>
-          <li> I formuläret ska hästens registrerade namn anges. För tydlighet rekommenderas att smeknamn, tillägg och alternativa stavningar inte används.</li>
-          <li>Ägare till avkommor efter Greyfall Stables hingstar förväntas vid förfrågan kunna lämna uppdateringar om avkomman, exempelvis kring utveckling, meriter eller vidare avel.</li>
-          <li>Om villkoren inte följs förbehåller sig Greyfall Stable rätten att neka framtida tjänster.</li>
+          <li>
+            Backbreeding innebär att avkomman skapas som redan född, vilket gör
+            att du får en ridbar häst direkt istället för att vänta på föl.
+            Backbreeding erbjuds från och med att hingsten haft sin första
+            fölkull.
+          </li>
+          <li>
+            I formuläret ska hästens registrerade namn anges. För tydlighet
+            rekommenderas att smeknamn, tillägg och alternativa stavningar inte
+            används.
+          </li>
+          <li>
+            Ägare till avkommor efter Greyfall Stables hingstar förväntas vid
+            förfrågan kunna lämna uppdateringar om avkomman, exempelvis kring
+            utveckling, meriter eller vidare avel.
+          </li>
+          <li>
+            Om villkoren inte följs förbehåller sig Greyfall Stable rätten att
+            neka framtida tjänster.
+          </li>
         </ul>
-        <p> Vid mer info om semin, backbreeding etc rekomederas det att läsa på på <a href="https://blippblopp.weebly.com/avel.html" target="_blank" rel="noopener noreferrer">https://blippblopp.weebly.com/avel.html</a></p>
+
+        <p>
+          Vid mer info om semin, backbreeding etc rekomederas det att läsa på på{" "}
+          <a
+            href="https://blippblopp.weebly.com/avel.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            https://blippblopp.weebly.com/avel.html
+          </a>
+        </p>
       </div>
-      <form
-        onSubmit={onSubmit}
-        className="breedingForm"
-      >
+
+      <form onSubmit={onSubmit} className="breedingForm">
         {/* 1) SSO / Discord */}
         <Field label="SSO Name">
           <TextInput
@@ -159,20 +219,31 @@ export default function BreedingPage() {
         </Field>
 
         <Field label="Välj hingst">
-          <select
-            value={form.studId}
-            onChange={(e) => update("studId", e.target.value)}
-            className="breedingSelect"
-          >
-            {studs.map((h) => (
-              <option key={h.id} value={h.id}>
-                {h.name}
-              </option>
-            ))}
-          </select>
+          {studsLoading ? (
+            <div style={{ opacity: 0.7 }}>Laddar hingstar...</div>
+          ) : studsError ? (
+            <div style={{ color: "crimson" }}>{studsError}</div>
+          ) : (
+            <select
+              value={form.studId}
+              onChange={(e) => update("studId", e.target.value)}
+              className="breedingSelect"
+              disabled={studs.length === 0}
+            >
+              {studs.length === 0 ? (
+                <option value="">Inga hingstar hittades</option>
+              ) : (
+                studs.map((h) => (
+                  <option key={h.id} value={h.id}>
+                    {h.name}
+                  </option>
+                ))
+              )}
+            </select>
+          )}
         </Field>
 
-        {/* ✅ Mode-knappar DIREKT under hingst-rutan */}
+        {/* Mode-knappar direkt under hingst */}
         <div className="breedingModeButtons">
           <button
             type="button"
@@ -185,7 +256,9 @@ export default function BreedingPage() {
           <button
             type="button"
             onClick={() => setMode("backbreeding")}
-            className={`breedingModeButton ${mode === "backbreeding" ? "active" : ""}`}
+            className={`breedingModeButton ${
+              mode === "backbreeding" ? "active" : ""
+            }`}
           >
             Backbreeding
           </button>
@@ -196,7 +269,8 @@ export default function BreedingPage() {
             Vald hingst: <strong>{stud.name}</strong>
           </div>
         )}
-        {/* 4) Sto (i samma ordning som bilden) */}
+
+        {/* Sto */}
         <Field label="Stoets registrerade namn">
           <TextInput
             value={form.mareRegisteredName}
@@ -261,7 +335,7 @@ export default function BreedingPage() {
           />
         </Field>
 
-        {/* 5) Dynamiska fält efter stoet */}
+        {/* Dynamiska fält */}
         {mode === "semen" && (
           <Field label="Betäckningsmetod">
             <select
@@ -334,9 +408,10 @@ export default function BreedingPage() {
               type="file"
               accept="image/*"
               onChange={(e) => setUpload(e.target.files?.[0] || null)}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
             />
           </label>
+
           {upload && (
             <div className="fileInfo">
               Vald fil: <strong>{upload.name}</strong>
@@ -344,17 +419,12 @@ export default function BreedingPage() {
           )}
         </Field>
 
-        <button
-          type="submit"
-          className="breedingSubmitButton"
-        >
+        <button type="submit" className="breedingSubmitButton">
           Skicka
         </button>
 
         {status.type !== "idle" && (
-          <div className={`breedingStatus ${status.type}`}>
-            {status.text}
-          </div>
+          <div className={`breedingStatus ${status.type}`}>{status.text}</div>
         )}
       </form>
     </div>

@@ -8,14 +8,14 @@ export const horses = [
         ageText: "7 år, 2019",
         sex: "Valack",
         isStud: false,
-        imageUrl: "/images/avelshastar.png",
+        imageUrl: "\\images\\bd66b190-1eb9-4e87-8a06-d767aafe4860.png",
 
         sireId: null,
         damId: null,
 
         images: {
             headshot: "",
-            bodyshot: "",
+            bodyshot: "/images/0b731974-8d2f-4526-87da-a69441de254a.png",
             pedigree: ""
         },
 
@@ -51,7 +51,7 @@ export const horses = [
         ageText: "15 år, 2011",
         sex: "Hingst",
         isStud: true,
-        imageUrl: "/images/avelshastar.png",
+        imageUrl: "\\images\\bd66b190-1eb9-4e87-8a06-d767aafe4860.png",
 
         sireId: null,
         damId: null,
@@ -60,7 +60,7 @@ export const horses = [
 
         images: {
             headshot: "",
-            bodyshot: "",
+            bodyshot: "/images/0b731974-8d2f-4526-87da-a69441de254a.png",
             pedigree: ""
         },
 
@@ -92,11 +92,11 @@ export const horses = [
         offspring: [
             {
                 name: "Greyfalls Constellation",
-                imageUrl: "/images/avelshastar.png"
+                imageUrl: "/images/bd66b190-1eb9-4e87-8a06-d767aafe4860.png"
             },
             {
                 name: "Radiant Axiell",
-                imageUrl: "/images/avelshastar.png"
+                imageUrl: "/images/bd66b190-1eb9-4e87-8a06-d767aafe4860.png"
             }
         ],
 
@@ -112,14 +112,14 @@ export const horses = [
         ageText: "5 år, 2021",
         sex: "Hingst",
         isStud: false,
-        imageUrl: "/images/avelshastar.png",
+        imageUrl: "/images/bd66b190-1eb9-4e87-8a06-d767aafe4860.png",
 
         sireId: "starboy",
         damId: null,
 
         images: {
             headshot: "",
-            bodyshot: "",
+            bodyshot: "/images/0b731974-8d2f-4526-87da-a69441de254a.png",
             pedigree: ""
         },
 
@@ -159,14 +159,14 @@ export const horses = [
         ageText: "16 år, 2010",
         sex: "Sto",
         isStud: false,
-        imageUrl: "/images/avelshastar.png",
+        imageUrl: "/images/bd66b190-1eb9-4e87-8a06-d767aafe4860.png",
 
         sireId: null,
         damId: null,
 
         images: {
             headshot: "",
-            bodyshot: "",
+            bodyshot: "/images/0b731974-8d2f-4526-87da-a69441de254a.png",
             pedigree: ""
         },
 
@@ -202,14 +202,14 @@ export const horses = [
         ageText: "3 år, 2023",
         sex: "Hingst",
         isStud: false,
-        imageUrl: "/images/avelshastar.png",
+        imageUrl: "/images/bd66b190-1eb9-4e87-8a06-d767aafe4860.png",
 
         sireId: null,
         damId: null,
 
         images: {
             headshot: "",
-            bodyshot: "",
+            bodyshot: "/images/0b731974-8d2f-4526-87da-a69441de254a.png",
             pedigree: ""
         },
 
@@ -249,14 +249,14 @@ export const horses = [
         ageText: "24 år, 2002",
         sex: "Valack",
         isStud: false,
-        imageUrl: "/images/avelshastar.png",
+        imageUrl: "/images/bd66b190-1eb9-4e87-8a06-d767aafe4860.png",
 
         sireId: null,
         damId: null,
 
         images: {
             headshot: "",
-            bodyshot: "",
+            bodyshot: "/images/0b731974-8d2f-4526-87da-a69441de254a.png",
             pedigree: ""
         },
 
@@ -291,14 +291,14 @@ export const horses = [
         ageText: "14 år, 2011",
         sex: "Sto",
         isStud: false,
-        imageUrl: "/images/avelshastar.png",
+        imageUrl: "/images/bd66b190-1eb9-4e87-8a06-d767aafe4860.png",
 
         sireId: null,
         damId: null,
 
         images: {
             headshot: "",
-            bodyshot: "",
+            bodyshot: "/images/0b731974-8d2f-4526-87da-a69441de254a.png",
             pedigree: ""
         },
 
@@ -334,14 +334,14 @@ export const horses = [
         ageText: "12 år, 2014",
         sex: "Valack",
         isStud: false,
-        imageUrl: "/images/avelshastar.png",
+        imageUrl: "/images/bd66b190-1eb9-4e87-8a06-d767aafe4860.png",
 
         sireId: null,
         damId: "rose",
 
         images: {
             headshot: "",
-            bodyshot: "",
+            bodyshot: "/images/0b731974-8d2f-4526-87da-a69441de254a.png",
             pedigree: ""
         },
 
@@ -381,14 +381,14 @@ export const horses = [
         ageText: "7 år, 2019",
         sex: "Hingst",
         isStud: true,
-        imageUrl: "/images/avelshastar.png",
+        imageUrl: "/images/bd66b190-1eb9-4e87-8a06-d767aafe4860.png",
 
         sireId: null,
         damId: null,
 
         images: {
             headshot: "",
-            bodyshot: "",
+            bodyshot: "/images/0b731974-8d2f-4526-87da-a69441de254a.png",
             pedigree: ""
         },
 
@@ -428,14 +428,14 @@ export const horses = [
         ageText: "4 år, 2022",
         sex: "Valack",
         isStud: false,
-        imageUrl: "/images/avelshastar.png",
+        imageUrl: "/images/bd66b190-1eb9-4e87-8a06-d767aafe4860.png",
 
         sireId: null,
         damId: null,
 
         images: {
             headshot: "",
-            bodyshot: "",
+            bodyshot: "/images/0b731974-8d2f-4526-87da-a69441de254a.png",
             pedigree: ""
         },
 

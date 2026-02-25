@@ -123,7 +123,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 40px;
-  max-height: 800px;
+  max-height: 1200px; /* Öka denna! */
   overflow-y: auto;
 }
 
