@@ -5,7 +5,6 @@
   margin: 0;
 }
 
-/* Hero Section */
 .hero {
   position: relative;
   width: 100%;
@@ -222,7 +221,6 @@
   }
 }
 
-/* ===== ENDAST över 1500px ===== */
 @media (min-width: 1500px) {
 
   .newsSection {
