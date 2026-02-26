@@ -29,9 +29,7 @@ async function assertOk(res, fallbackMsg) {
   throw new Error(msg);
 }
 
-/* =========================
-   AUTH
-========================= */
+/* AUTH*/
 export async function adminLogin(username, password) {
   const res = await fetch(`${API_BASE}/auth/login`, {
     method: "POST",
@@ -53,9 +51,7 @@ export function isAdminLoggedIn() {
   return Boolean(getToken());
 }
 
-/* =========================
-   NEWS
-========================= */
+/* NEWS*/
 export async function getNews() {
   const res = await fetch(`${API_BASE}/news`);
   await assertOk(res, "Could not fetch news");
@@ -80,9 +76,7 @@ export async function deleteNews(id) {
   await assertOk(res, "Delete news failed");
 }
 
-/* =========================
-   HORSES
-========================= */
+/* HORSES */
 export async function getHorses() {
   const res = await fetch(`${API_BASE}/horses`);
   await assertOk(res, "Could not fetch horses");
@@ -110,7 +104,7 @@ export async function createHorse(horse) {
   return res.json();
 }
 
-// UPDATE horse (admin) - kräver PATCH /api/horses/:id i backend
+
 export async function updateHorse(id, patch) {
   const res = await fetch(`${API_BASE}/horses/${id}`, {
     method: "PATCH",
@@ -121,29 +115,25 @@ export async function updateHorse(id, patch) {
   return res.json();
 }
 
-// DELETE horse (admin) - kräver DELETE /api/horses/:id i backend
 export async function deleteHorse(id) {
   const res = await fetch(`${API_BASE}/horses/${id}`, {
     method: "DELETE",
     headers: { ...authHeaders() },
   });
   await assertOk(res, "Delete horse failed");
-  return res.json(); // { ok: true }
+  return res.json(); 
 }
 
-// Generera id för hästar som saknar id (admin) - kräver POST /api/horses/generate-ids
 export async function generateHorseIds() {
   const res = await fetch(`${API_BASE}/horses/generate-ids`, {
     method: "POST",
     headers: { ...authHeaders() },
   });
   await assertOk(res, "Generate ids failed");
-  return res.json(); // { ok: true, updatedCount }
+  return res.json(); 
 }
 
-/* =========================
-   UPLOAD
-========================= */
+/*UPLOAD*/
 export async function uploadImage(file) {
   const fd = new FormData();
   fd.append("image", file);
@@ -155,5 +145,5 @@ export async function uploadImage(file) {
   });
 
   await assertOk(res, "Upload failed");
-  return res.json(); // { imageUrl }
+  return res.json(); 
 }
