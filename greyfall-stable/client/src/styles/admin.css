@@ -319,3 +319,30 @@
 .adminCheckbox span {
     font-size: 14px;
 }
+
+.fileBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+  transition: 0.2s ease;
+}
+
+.fileBtn:hover {
+  background: #333;
+}
+
+.fileBtn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.fileBtn input[type="file"] {
+  display: none;
+}

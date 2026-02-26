@@ -1,6 +1,3 @@
-// ...existing code...
-// ...existing code...
-const isTest = process.env.NODE_ENV === "test";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -107,6 +104,8 @@ const HorseSchema = new mongoose.Schema(
     imageUrl: String,
     images: {
       headshot: String,
+      card: String,
+      stallion: String,
       bodyshot: String,
       pedigree: String,
     },
@@ -135,6 +134,9 @@ function authMiddleware(req, res, next) {
   }
 }
 
+/* ================================
+   ROOT + LOGIN
+================================ */
 app.get("/", (_req, res) => res.send("Greyfall Stable API is running"));
 
 app.post("/api/auth/login", (req, res) => {
@@ -280,6 +282,57 @@ app.post("/api/upload", authMiddleware, upload.single("image"), (req, res) => {
 });
 
 /* ================================
+   NEWS – PUBLIC
+================================ */
+app.get("/api/news", async (_req, res) => {
+  try {
+    const news = await News.find().sort({ date: -1 });
+    res.json(news);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Could not fetch news" });
+  }
+});
+
+/* ================================
+   NEWS – ADMIN
+================================ */
+app.post("/api/news", authMiddleware, async (req, res) => {
+  try {
+    const { title, body, imageUrl = "", linkUrl = "" } = req.body || {};
+
+    if (!title?.trim() || !body?.trim()) {
+      return res.status(400).json({ error: "title and body required" });
+    }
+
+    const created = await News.create({
+      id: crypto.randomUUID(),
+      title: title.trim(),
+      body: body.trim(),
+      imageUrl: String(imageUrl || ""),
+      linkUrl: String(linkUrl || ""),
+      date: new Date(),
+    });
+
+    res.status(201).json(created);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Could not create news" });
+  }
+});
+
+app.delete("/api/news/:id", authMiddleware, async (req, res) => {
+  try {
+    const deleted = await News.findOneAndDelete({ id: req.params.id });
+    if (!deleted) return res.status(404).json({ error: "Not found" });
+    res.json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Could not delete news" });
+  }
+});
+
+/* ================================
    DB CONNECT (export)
 ================================ */
 export async function connectDB(uri) {
@@ -292,16 +345,3 @@ export async function connectDB(uri) {
 export async function disconnectDB() {
   await mongoose.disconnect();
 }
-
-/* ================================
-   NEWS – PUBLIC
-================================ */
-app.get("/api/news", async (_req, res) => {
-  try {
-    const news = await News.find().sort({ date: -1 });
-    res.json(news);
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: "Could not fetch news" });
-  }
-});
