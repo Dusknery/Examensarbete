@@ -72,8 +72,7 @@ export default function BreedingPage() {
 
         const list = Array.isArray(data) ? data : [];
         setStuds(list);
-
-        // sätt default studId när listan kommer in
+        
         setForm((prev) => ({
           ...prev,
           studId: prev.studId || list[0]?.id || "",
