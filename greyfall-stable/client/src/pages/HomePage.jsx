@@ -81,7 +81,14 @@ export default function HomePage() {
                 {n.body ? <p className="newsBody">{n.body}</p> : null}
 
                 {n.imageUrl ? (
-                  <img className="newsImage" src={n.imageUrl} alt={n.title} />
+                  <img
+                    className="newsImage"
+                    src={n.imageUrl}
+                    alt={n.title}
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
                 ) : null}
 
                 {n.linkUrl ? (

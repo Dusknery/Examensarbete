@@ -1,8 +1,29 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { horses } from "../data/horses";
+import { getHorses } from "../services/api";
 import "../styles/stallions.css";
 
 export default function StallionsPage() {
+  const [horses, setHorses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        setLoading(true);
+        const data = await getHorses();
+        if (alive) setHorses(data);
+      } catch (e) {
+        if (alive) setError(e.message || "Kunde inte hämta hingstar");
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+    return () => { alive = false; };
+  }, []);
+
   const stallions = horses.filter(h => h.isStud);
 
   return (
@@ -29,15 +50,22 @@ export default function StallionsPage() {
         </div>
       </div>
 
-      {/* Stallion Cards */}
-      {stallions.map(horse => (
+      {/* Loading/Error/Content */}
+      {loading ? (
+        <div style={{ padding: 20 }}>Laddar...</div>
+      ) : error ? (
+        <div style={{ padding: 20, color: "crimson" }}>{error}</div>
+      ) : (
+        <>
+          {/* Stallion Cards */}
+          {stallions.map(horse => (
         <div key={horse.id} className="stallionCard">
           <div className="stallionMain">
             {/* Left: Image and Pedigree */}
             <div className="stallionLeft">
-              {horse.imageUrl ? (
+              {(horse.images?.bodyshot || horse.imageUrl) ? (
                 <img
-                  src={horse.imageUrl}
+                  src={horse.images?.bodyshot || horse.imageUrl}
                   alt={horse.name}
                   className="stallionImage"
                 />
@@ -119,7 +147,9 @@ export default function StallionsPage() {
             </div>
           </div>
         </div>
-      ))}
+          ))}
+        </>
+      )}
     </div>
   );
 }
