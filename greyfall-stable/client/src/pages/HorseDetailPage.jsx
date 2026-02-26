@@ -43,9 +43,6 @@ export default function HorseDetailPage() {
   const offspring = useMemo(() => {
     if (!horse?.id || !allHorses?.length) return [];
 
-    // Stöd för båda varianter:
-    // 1) sireId/damId (om du lägger till dem i schema)
-    // 2) pedigree.eId/pedigree.uId (rekommenderat)
     return allHorses.filter((h) => {
       const byLegacy = h?.sireId === horse.id || h?.damId === horse.id;
       const byPedigreeIds =
