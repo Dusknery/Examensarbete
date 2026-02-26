@@ -23,18 +23,22 @@ export default function AdminLoginPage() {
     <div style={{ maxWidth: 520, display: "grid", gap: 12 }}>
       <h1>Admin</h1>
 
-      <form onSubmit={onSubmit} style={{ display: "grid", gap: 10 }}>
+         <form onSubmit={onSubmit} style={{ display: "grid", gap: 10 }} autoComplete="on">
         <input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Användarnamn"
-        />
+           name="username"
+           autoComplete="username"
+         />
         <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Lösenord"
           type="password"
-        />
+           name="current-password"
+           autoComplete="current-password"
+         />
         <button type="submit">Logga in</button>
       </form>
 

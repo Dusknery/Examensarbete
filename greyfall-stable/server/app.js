@@ -1,3 +1,6 @@
+// ...existing code...
+// ...existing code...
+const isTest = process.env.NODE_ENV === "test";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -289,3 +292,16 @@ export async function connectDB(uri) {
 export async function disconnectDB() {
   await mongoose.disconnect();
 }
+
+/* ================================
+   NEWS – PUBLIC
+================================ */
+app.get("/api/news", async (_req, res) => {
+  try {
+    const news = await News.find().sort({ date: -1 });
+    res.json(news);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Could not fetch news" });
+  }
+});

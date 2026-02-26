@@ -17,6 +17,7 @@ import ImageCropModal from "../components/ImageCropModal";
 import { IMAGE_PRESETS } from "../config/imagePresets";
 import GeneticsPicker, { geneticsToString } from "../components/GeneticsPicker";
 import "../styles/admin.css";
+import { PLACEHOLDERS } from "../config/placeholders";
 
 // Viktigt: använd som "mall" och klona alltid (ingen delad referens)
 const DEFAULT_GENETICS_TEMPLATE = {
@@ -60,22 +61,19 @@ export default function AdminPage() {
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [uploading, setUploading] = useState(false);
 
-  // Horse form
+  // Horse form & edit mode
   const [horseName, setHorseName] = useState("");
   const [horseNickname, setHorseNickname] = useState("");
   const [horseBreed, setHorseBreed] = useState("");
   const [horseYear, setHorseYear] = useState("");
   const [horseSex, setHorseSex] = useState("");
   const [isStud, setIsStud] = useState(false);
-
-  // Pedigree
   const [pedigreeE, setPedigreeE] = useState("");
   const [pedigreeU, setPedigreeU] = useState("");
   const [pedigreeUE, setPedigreeUE] = useState("");
-
-  // Optional: parent ids (för avkommor)
   const [pedigreeEId, setPedigreeEId] = useState("");
   const [pedigreeUId, setPedigreeUId] = useState("");
+  const [editHorseId, setEditHorseId] = useState(null);
 
   // Disciplines
   const [selectedDiscipline, setSelectedDiscipline] = useState("");
@@ -146,6 +144,9 @@ export default function AdminPage() {
     setNews(Array.isArray(n) ? n : []);
     setHorses(Array.isArray(h) ? h : []);
   }
+
+
+
 
   useEffect(() => {
     if (!isAdminLoggedIn()) {
@@ -292,7 +293,7 @@ export default function AdminPage() {
     return data.imageUrl || "";
   }
 
-  async function addHorse(e) {
+  async function handleHorseSubmit(e) {
     e.preventDefault();
     setMsg("");
 
@@ -325,16 +326,19 @@ export default function AdminPage() {
       const yearNum = horseYear ? Number(horseYear) : undefined;
       const mkhNum = horseMkh ? Number(horseMkh) : undefined;
 
-      const newHorse = {
-        // OBS: backend genererar id automatiskt om du inte skickar id
+      const finalHeadshot = headshotUrl || PLACEHOLDERS.headshot;
+      const finalBodyshot = bodyshotUrl || PLACEHOLDERS.bodyshot;
+      const finalCard = cardUrl || PLACEHOLDERS.card || finalBodyshot;
+      const finalStallion = stallionUrl || PLACEHOLDERS.stallion || finalBodyshot;
+      const finalPedigree = pedigreeUrl || PLACEHOLDERS.pedigree || "";
+
+      const horseData = {
         name: horseName.trim(),
         nickname: horseNickname.trim() || undefined,
         breed: horseBreed.trim() || "Okänd ras",
-
         year: Number.isFinite(yearNum) ? String(yearNum) : undefined,
         sex: horseSex || "Okänd",
         isStud: horseSex === "Hingst" ? isStud : false,
-
         pedigree: {
           e: pedigreeE.trim() || undefined,
           eId: pedigreeEId.trim() || undefined,
@@ -342,31 +346,30 @@ export default function AdminPage() {
           uId: pedigreeUId.trim() || undefined,
           ue: pedigreeUE.trim() || undefined,
         },
-
         levels,
-
         other: {
           mkh: Number.isFinite(mkhNum) ? String(mkhNum) : undefined,
           country: horseCountry.trim() || undefined,
         },
-
-        // om du vill spara string istället, byt till geneticsToString(...)
         genetics: geneticsToString(horseGenetics),
-
         description: horseDescription.trim() || undefined,
-
-        imageUrl: headshotUrl || "",
-
+        imageUrl: finalHeadshot,
         images: {
-          headshot: headshotUrl || "",
-          card: cardUrl || "",
-          stallion: stallionUrl || "",
-          bodyshot: bodyshotUrl || "",
-          pedigree: pedigreeUrl || "",
+          headshot: finalHeadshot,
+          card: finalCard,
+          stallion: finalStallion,
+          bodyshot: finalBodyshot,
+          pedigree: finalPedigree,
         },
       };
 
-      await createHorse(newHorse);
+      if (editHorseId) {
+        await updateHorse(editHorseId, horseData);
+        setMsg("Häst uppdaterad.");
+      } else {
+        await createHorse(horseData);
+        setMsg("Häst skapad.");
+      }
 
       // Reset form
       setHorseName("");
@@ -375,33 +378,28 @@ export default function AdminPage() {
       setHorseYear("");
       setHorseSex("");
       setIsStud(false);
-
       setPedigreeE("");
       setPedigreeU("");
       setPedigreeUE("");
       setPedigreeEId("");
       setPedigreeUId("");
-
       setHorseMkh("");
       setHorseCountry("");
-
       setHorseGenetics(cloneGenetics());
       setHorseDescription("");
-
       setHeadshotUrl("");
       setCardUrl("");
       setStallionUrl("");
       setBodyshotUrl("");
       setPedigreeUrl("");
-
       setSelectedDiscipline("");
       setDisciplines([]);
+      setEditHorseId(null);
 
       await load();
-      setMsg("Häst skapad.");
     } catch (e2) {
       console.error(e2);
-      setMsg("Kunde inte skapa häst.");
+      setMsg(editHorseId ? "Kunde inte uppdatera häst." : "Kunde inte skapa häst.");
     }
   }
 
@@ -491,10 +489,10 @@ export default function AdminPage() {
                 )}
               </div>
 
-              {uploadedImageUrl && (
+              {(uploadedImageUrl || imageFile) && (
                 <img
-                  src={uploadedImageUrl}
-                  alt="preview"
+                  src={uploadedImageUrl || PLACEHOLDERS.card || PLACEHOLDERS.bodyshot}
+                  alt="news preview"
                   className="adminImagePreview"
                 />
               )}
@@ -543,8 +541,41 @@ export default function AdminPage() {
 
       {activeTab === "horses" && (
         <div className="adminSection">
-          <form onSubmit={addHorse} className="adminForm">
-            <h2 style={{ margin: 0, fontSize: "24px" }}>Lägg till häst</h2>
+          <form onSubmit={handleHorseSubmit} className="adminForm">
+            <h2 style={{ margin: 0, fontSize: "24px" }}>{editHorseId ? "Redigera häst" : "Lägg till häst"}</h2>
+            {editHorseId && (
+              <button
+                type="button"
+                onClick={() => {
+                  setEditHorseId(null);
+                  setHorseName("");
+                  setHorseNickname("");
+                  setHorseBreed("");
+                  setHorseYear("");
+                  setHorseSex("");
+                  setIsStud(false);
+                  setPedigreeE("");
+                  setPedigreeU("");
+                  setPedigreeUE("");
+                  setPedigreeEId("");
+                  setPedigreeUId("");
+                  setHorseMkh("");
+                  setHorseCountry("");
+                  setHorseGenetics(cloneGenetics());
+                  setHorseDescription("");
+                  setHeadshotUrl("");
+                  setCardUrl("");
+                  setStallionUrl("");
+                  setBodyshotUrl("");
+                  setPedigreeUrl("");
+                  setSelectedDiscipline("");
+                  setDisciplines([]);
+                }}
+                style={{ marginBottom: 12 }}
+              >
+                Avbryt redigering
+              </button>
+            )}
 
             <input
               value={horseName}
@@ -763,7 +794,9 @@ export default function AdminPage() {
                   e.target.value = "";
                 }}
               />
-              {headshotUrl ? <small>Vald</small> : <small>Ingen</small>}
+              {cropFile && cropPreset?.key === "headshot" ? (
+                <small>{cropFile.name}</small>
+              ) : headshotUrl ? <small>Vald</small> : <small>Ingen</small>}
               {headshotUrl && (
                 <img
                   src={headshotUrl}
@@ -784,32 +817,42 @@ export default function AdminPage() {
                   e.target.value = "";
                 }}
               />
-              {cardUrl ? <small>Vald</small> : <small>Ingen</small>}
+              {cropFile && cropPreset?.key === "card" ? (
+                <small>{cropFile.name}</small>
+              ) : cardUrl ? <small>Vald</small> : <small>Ingen</small>}
               {cardUrl && (
-                <img src={cardUrl} alt="card preview" className="adminImagePreview" />
-              )}
-            </div>
-
-            <div className="adminImageUpload">
-              <strong>Hingstbild (stallions page) (5:3)</strong>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0] || null;
-                  if (file) openCrop(file, IMAGE_PRESETS.stallion);
-                  e.target.value = "";
-                }}
-              />
-              {stallionUrl ? <small>Vald</small> : <small>Ingen</small>}
-              {stallionUrl && (
                 <img
-                  src={stallionUrl}
-                  alt="stallion preview"
+                  src={cardUrl}
+                  alt="card preview"
                   className="adminImagePreview"
                 />
               )}
             </div>
+
+            {isStud && (
+              <div className="adminImageUpload">
+                <strong>Hingstbild (stallions page) (5:3)</strong>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0] || null;
+                    if (file) openCrop(file, IMAGE_PRESETS.stallion);
+                    e.target.value = "";
+                  }}
+                />
+                {cropFile && cropPreset?.key === "stallion" ? (
+                  <small>{cropFile.name}</small>
+                ) : stallionUrl ? <small>Vald</small> : <small>Ingen</small>}
+                {stallionUrl && (
+                  <img
+                    src={stallionUrl}
+                    alt="stallion preview"
+                    className="adminImagePreview"
+                  />
+                )}
+              </div>
+            )}
 
             <div className="adminImageUpload">
               <strong>Bodyshot (4:5)</strong>
@@ -822,7 +865,9 @@ export default function AdminPage() {
                   e.target.value = "";
                 }}
               />
-              {bodyshotUrl ? <small>Vald</small> : <small>Ingen</small>}
+              {cropFile && cropPreset?.key === "bodyshot" ? (
+                <small>{cropFile.name}</small>
+              ) : bodyshotUrl ? <small>Vald</small> : <small>Ingen</small>}
               {bodyshotUrl && (
                 <img
                   src={bodyshotUrl}
@@ -843,7 +888,9 @@ export default function AdminPage() {
                   e.target.value = "";
                 }}
               />
-              {pedigreeUrl ? <small>Vald</small> : <small>Ingen</small>}
+              {cropFile && cropPreset?.key === "pedigree" ? (
+                <small>{cropFile.name}</small>
+              ) : pedigreeUrl ? <small>Vald</small> : <small>Ingen</small>}
               {pedigreeUrl && (
                 <img
                   src={pedigreeUrl}
@@ -860,14 +907,32 @@ export default function AdminPage() {
 
       {activeTab === "allhorses" && (
         <div className="adminSection">
-          <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: 12,
+              alignItems: "center",
+            }}
+          >
             <h3 style={{ marginBottom: "16px" }}>Befintliga hästar</h3>
+
+            <div style={{ display: "flex", gap: 8 }}>
+              <button type="button" onClick={onGenerateIds}>
+                Generera id för saknade
+              </button>
+            </div>
           </div>
 
           <div className="adminHorseList">
             {horses.map((h) => {
               const img =
-                h?.images?.card || h?.images?.headshot || h?.imageUrl || "";
+                h?.images?.card ||
+                h?.images?.headshot ||
+                h?.imageUrl ||
+                PLACEHOLDERS.card ||
+                PLACEHOLDERS.bodyshot ||
+                "";
 
               return (
                 <div key={h.id} className="adminHorseItem">
@@ -893,8 +958,45 @@ export default function AdminPage() {
                   </div>
 
                   <span>{h.isStud ? "Stud: JA" : "Stud: NEJ"}</span>
-
                   <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                    <button
+                      onClick={() => {
+                        setEditHorseId(h.id);
+                        setHorseName(h.name || "");
+                        setHorseNickname(h.nickname || "");
+                        setHorseBreed(h.breed || "");
+                        setHorseYear(h.year || "");
+                        setHorseSex(h.sex || "");
+                        setIsStud(h.isStud || false);
+                        setPedigreeE(h.pedigree?.e || "");
+                        setPedigreeU(h.pedigree?.u || "");
+                        setPedigreeUE(h.pedigree?.ue || "");
+                        setPedigreeEId(h.pedigree?.eId || "");
+                        setPedigreeUId(h.pedigree?.uId || "");
+                        setHorseMkh(h.other?.mkh || "");
+                        setHorseCountry(h.other?.country || "");
+                        setHorseGenetics(h.genetics ? h.genetics.split("/") : cloneGenetics());
+                        setHorseDescription(h.description || "");
+                        setHeadshotUrl(h.images?.headshot || "");
+                        setCardUrl(h.images?.card || "");
+                        setStallionUrl(h.images?.stallion || "");
+                        setBodyshotUrl(h.images?.bodyshot || "");
+                        setPedigreeUrl(h.images?.pedigree || "");
+                        setDisciplines(
+                          h.levels
+                            ? Object.entries(h.levels).map(([name, merits]) => ({
+                                name,
+                                merits,
+                              }))
+                            : []
+                        );
+                        setSelectedDiscipline("");
+                      }}
+                      className="adminEditBtn"
+                      type="button"
+                    >
+                      Redigera
+                    </button>
                     <button
                       onClick={() => toggleStud(h)}
                       className="adminToggleBtn"
@@ -902,11 +1004,11 @@ export default function AdminPage() {
                     >
                       Toggle stud
                     </button>
-
                     <button
                       onClick={() => removeHorse(h.id)}
                       className="adminDeleteBtn"
                       type="button"
+                      style={{ marginLeft: "auto" }}
                     >
                       Ta bort
                     </button>
@@ -933,17 +1035,34 @@ export default function AdminPage() {
             try {
               setCropUploading(true);
               setMsg("");
+              console.log("Tar emot beskuren blob i AdminPage", blob);
 
               const url = await uploadCroppedBlob(
                 blob,
                 `${cropPreset?.key || "cropped"}.jpg`
               );
+              console.log("Uppladdad bild-URL:", url);
 
-              if (cropPreset?.key === "headshot") setHeadshotUrl(url);
-              if (cropPreset?.key === "card") setCardUrl(url);
-              if (cropPreset?.key === "stallion") setStallionUrl(url);
-              if (cropPreset?.key === "bodyshot") setBodyshotUrl(url);
-              if (cropPreset?.key === "pedigree") setPedigreeUrl(url);
+              if (cropPreset?.key === "headshot") {
+                console.log("Sätter headshotUrl", url);
+                setHeadshotUrl(url);
+              }
+              if (cropPreset?.key === "card") {
+                console.log("Sätter cardUrl", url);
+                setCardUrl(url);
+              }
+              if (cropPreset?.key === "stallion") {
+                console.log("Sätter stallionUrl", url);
+                setStallionUrl(url);
+              }
+              if (cropPreset?.key === "bodyshot") {
+                console.log("Sätter bodyshotUrl", url);
+                setBodyshotUrl(url);
+              }
+              if (cropPreset?.key === "pedigree") {
+                console.log("Sätter pedigreeUrl", url);
+                setPedigreeUrl(url);
+              }
 
               setMsg("Bild sparad.");
 
@@ -951,7 +1070,7 @@ export default function AdminPage() {
               setCropFile(null);
               setCropPreset(null);
             } catch (e) {
-              console.error(e);
+              console.error("Fel vid uppladdning av beskuren bild:", e);
               setMsg("Kunde inte spara beskuren bild.");
             } finally {
               setCropUploading(false);

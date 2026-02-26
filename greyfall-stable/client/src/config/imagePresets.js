@@ -28,10 +28,10 @@ export const IMAGE_PRESETS = {
 
   bodyshot: {
     key: "bodyshot",
-    label: "Bodyshot (horse detail)",
-    aspect: 4 / 5,
-    output: { width: 1400, height: 1750 },
-    preview: { width: 700, height: 875 },
+    label: "Bodyshot (horse detail, liggande)",
+    aspect: 5 / 3, // landscape
+    output: { width: 1500, height: 900 },
+    preview: { width: 1000, height: 600 },
     targetField: "images.bodyshot",
   },
 

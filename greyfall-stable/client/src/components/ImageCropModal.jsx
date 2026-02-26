@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Cropper from "react-easy-crop";
 import { getCroppedBlob } from "../utils/cropImage";
 
@@ -12,20 +12,65 @@ export default function ImageCropModal({
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [cropPixels, setCropPixels] = useState(null);
+  const [ready, setReady] = useState(false);
 
   const imageUrl = useMemo(() => (file ? URL.createObjectURL(file) : ""), [file]);
+
+  // Viktigt: städa objectURL
+  useEffect(() => {
+    return () => {
+      if (imageUrl) URL.revokeObjectURL(imageUrl);
+    };
+  }, [imageUrl]);
+
+  // Reset när ny fil/preset öppnas
+  useEffect(() => {
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setCropPixels(null);
+    setReady(false);
+  }, [file, preset]);
 
   const onCropComplete = useCallback((_area, areaPixels) => {
     setCropPixels(areaPixels);
   }, []);
 
+  const onMediaLoaded = useCallback((mediaSize) => {
+    // mediaSize: { width, height, naturalWidth, naturalHeight }
+    // Sätt ett default cropområde = hela bilden, så Save funkar direkt
+    const w = mediaSize?.naturalWidth || mediaSize?.width || 0;
+    const h = mediaSize?.naturalHeight || mediaSize?.height || 0;
+
+    if (w > 0 && h > 0) {
+      setCropPixels({ x: 0, y: 0, width: w, height: h });
+      setReady(true);
+    } else {
+      setReady(true);
+    }
+  }, []);
+
   const handleSave = useCallback(async () => {
-    if (!imageUrl || !cropPixels) return;
-    const blob = await getCroppedBlob(imageUrl, cropPixels, preset.output);
-    onConfirmBlob(blob);
+    if (!imageUrl || !cropPixels || !preset) {
+      console.warn("Kan inte spara: saknar imageUrl, cropPixels eller preset", { imageUrl, cropPixels, preset });
+      return;
+    }
+
+    try {
+      const output = preset.output || { width: 1200, height: 1200, quality: 0.92 };
+      console.log("Startar beskärning", { imageUrl, cropPixels, output });
+      const blob = await getCroppedBlob(imageUrl, cropPixels, output);
+      console.log("Beskärning klar, skickar blob vidare", blob);
+      onConfirmBlob(blob);
+    } catch (e) {
+      console.error("Crop failed:", e);
+      // Om du vill: visa ett meddelande i UI här
+      // t.ex. setLocalError("Kunde inte beskära bilden.")
+    }
   }, [imageUrl, cropPixels, preset, onConfirmBlob]);
 
   if (!file || !preset) return null;
+
+  const canSave = !busy && ready && !!cropPixels;
 
   return (
     <div style={styles.backdrop} role="dialog" aria-modal="true">
@@ -38,13 +83,7 @@ export default function ImageCropModal({
         </div>
 
         <div style={styles.body}>
-          <div
-            style={{
-              ...styles.cropWrap,
-              width: "100%",
-              height: 520,
-            }}
-          >
+          <div style={{ ...styles.cropWrap, width: "100%", height: 520 }}>
             <Cropper
               image={imageUrl}
               crop={crop}
@@ -53,6 +92,7 @@ export default function ImageCropModal({
               onCropChange={setCrop}
               onZoomChange={setZoom}
               onCropComplete={onCropComplete}
+              onMediaLoaded={onMediaLoaded}
               restrictPosition
             />
           </div>
@@ -98,7 +138,13 @@ export default function ImageCropModal({
                 <button type="button" onClick={onCancel} disabled={busy}>
                   Avbryt
                 </button>
-                <button type="button" onClick={handleSave} disabled={busy} style={styles.saveBtn}>
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={!canSave}
+                  style={styles.saveBtn}
+                  title={!ready ? "Laddar bild..." : !cropPixels ? "Ingen crop-data ännu" : ""}
+                >
                   {busy ? "Sparar..." : "Spara beskärning"}
                 </button>
               </div>
