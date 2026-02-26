@@ -1,25 +1,19 @@
-/* ===============================
-   Greyfall Stable - Global CSS
-   Palette + Typography from Figma
-================================= */
-
 :root {
-  /* Colors */
   --white: #ffffff;
-  --bg: #f9f0e6;          /* background */
-  --highlight: #f2ddbb;   /* form/news highlighted background */
-  --gold: #cc9f57;        /* header/buttons */
-  --text: #000000;        /* text */
-  --link: #2292e2;        /* links */
+  --bg: #f9f0e6;        
+  --highlight: #f2ddbb;  
+  --gold: #cc9f57;    
+  --text: #000000;    
+  --link: #2292e2;  
   --border: rgba(0, 0, 0, 0.12);
  
-  /* Radius + spacing */
+
   --radius: 14px;
   --radius-sm: 10px;
 
   --container: 820px;
 
-  /* Typography stacks (fallback-safe) */
+
   --font-base: "Cormorant Infant", "Georgia", serif;          /* information */
   --font-nav: "Montserrat Subrayada", "Georgia", serif;       /* nav */
   --font-site: "Water Brush", "Georgia", serif;               /* site name */
@@ -32,9 +26,7 @@ font-family: "Water Brush", cursive;
 font-family: "Katibeh", serif;
 }
 
-/* ===============================
-   RESET
-================================= */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -53,9 +45,7 @@ body {
   line-height: 1.6;
 }
 
-/* ===============================
-   GLOBAL LINKS
-================================= */
+
 a {
   color: var(--link);
   text-decoration: none;
@@ -65,9 +55,7 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ===============================
-   LAYOUT
-================================= */
+
 .page-container {
   max-width: var(--container);
   margin: 0 auto;
@@ -76,9 +64,7 @@ a:hover {
   gap: 24px;
 }
 
-/* ===============================
-   NAVBAR BAS (enkel, kan stylas mer sen)
-================================= */
+
 .navbar {
   background: var(--gold);
 }
@@ -116,9 +102,7 @@ a:hover {
   opacity: 0.85;
 }
 
-/* ===============================
-   TYPOGRAPHY HELPERS
-================================= */
+
 .h-news {
   font-family: var(--font-news);
   font-size: 24px;
@@ -131,9 +115,7 @@ a:hover {
   font-weight: 400;
 }
 
-/* ===============================
-   CARDS / CONTAINERS
-================================= */
+
 .card {
   background: var(--white);
   border: 1px solid var(--border);
@@ -148,9 +130,7 @@ a:hover {
   padding: 18px;
 }
 
-/* ===============================
-   BUTTONS
-================================= */
+
 button,
 .btn {
   background: var(--gold);
@@ -174,9 +154,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* ===============================
-   INPUTS
-================================= */
+
 input,
 textarea,
 select {
@@ -192,9 +170,6 @@ textarea {
   resize: vertical;
 }
 
-/* ===============================
-   SCROLL BOX (nyheter)
-================================= */
 .scroll-box {
   max-height: 520px;
   overflow-y: auto;
