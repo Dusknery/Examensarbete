@@ -37,7 +37,6 @@ export default function ImageCropModal({
 
   const onMediaLoaded = useCallback((mediaSize) => {
     // mediaSize: { width, height, naturalWidth, naturalHeight }
-    // Sätt ett default cropområde = hela bilden, så Save funkar direkt
     const w = mediaSize?.naturalWidth || mediaSize?.width || 0;
     const h = mediaSize?.naturalHeight || mediaSize?.height || 0;
 
@@ -63,8 +62,6 @@ export default function ImageCropModal({
       onConfirmBlob(blob);
     } catch (e) {
       console.error("Crop failed:", e);
-      // Om du vill: visa ett meddelande i UI här
-      // t.ex. setLocalError("Kunde inte beskära bilden.")
     }
   }, [imageUrl, cropPixels, preset, onConfirmBlob]);
 
