@@ -25,9 +25,7 @@ const uploadsDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 app.use("/uploads", express.static(uploadsDir));
 
-/* ================================
-   HELPERS (ID GENERATION)
-================================ */
+
 function slugify(str = "") {
   return String(str)
     .toLowerCase()
@@ -42,7 +40,6 @@ function slugify(str = "") {
 async function generateUniqueHorseId(name) {
   const base = slugify(name) || "horse";
 
-  // försök 50 gånger med random suffix (extremt låg risk för krock)
   for (let i = 0; i < 50; i++) {
     const suffix = crypto.randomBytes(3).toString("hex"); // 6 tecken
     const candidate = `${base}-${suffix}`;
@@ -50,13 +47,10 @@ async function generateUniqueHorseId(name) {
     if (!exists) return candidate;
   }
 
-  // fallback
+
   return `${base}-${crypto.randomUUID()}`;
 }
 
-/* ================================
-   MODELS
-================================ */
 const NewsSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
@@ -84,9 +78,9 @@ const HorseSchema = new mongoose.Schema(
 
     pedigree: {
       e: String, // far namn
-      eId: String, // far id (matchar horse.id)
+      eId: String, // far id (länkar far till avkomma)
       u: String, // mor namn
-      uId: String, // mor id
+      uId: String, // mor id (länkar mor till avkomma)
       ue: String, // morfar namn
     },
 
@@ -116,9 +110,7 @@ const HorseSchema = new mongoose.Schema(
 export const News = mongoose.model("News", NewsSchema);
 export const Horse = mongoose.model("Horse", HorseSchema);
 
-/* ================================
-   AUTH
-================================ */
+
 function authMiddleware(req, res, next) {
   const header = req.headers.authorization || "";
   const token = header.startsWith("Bearer ") ? header.slice(7) : null;
@@ -134,9 +126,7 @@ function authMiddleware(req, res, next) {
   }
 }
 
-/* ================================
-   ROOT + LOGIN
-================================ */
+
 app.get("/", (_req, res) => res.send("Greyfall Stable API is running"));
 
 app.post("/api/auth/login", (req, res) => {
@@ -153,9 +143,7 @@ app.post("/api/auth/login", (req, res) => {
   return res.status(401).json({ message: "Invalid credentials" });
 });
 
-/* ================================
-   HORSES – PUBLIC
-================================ */
+
 app.get("/api/horses", async (_req, res) => {
   try {
     const horses = await Horse.find().sort({ createdAt: -1 });
@@ -177,9 +165,7 @@ app.get("/api/horses/:id", async (req, res) => {
   }
 });
 
-/* ================================
-   HORSES – ADMIN
-================================ */
+
 app.post("/api/horses", authMiddleware, async (req, res) => {
   try {
     const horse = req.body;
@@ -208,7 +194,7 @@ app.post("/api/horses", authMiddleware, async (req, res) => {
   }
 });
 
-// UPDATE (PATCH) horse (admin)
+// UPDATE horse (admin)
 app.patch("/api/horses/:id", authMiddleware, async (req, res) => {
   try {
     const updated = await Horse.findOneAndUpdate(
@@ -260,9 +246,7 @@ app.post("/api/horses/generate-ids", authMiddleware, async (_req, res) => {
   }
 });
 
-/* ================================
-   UPLOAD – ADMIN
-================================ */
+
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, uploadsDir),
   filename: (_req, file, cb) => {
@@ -281,9 +265,7 @@ app.post("/api/upload", authMiddleware, upload.single("image"), (req, res) => {
   res.status(201).json({ imageUrl });
 });
 
-/* ================================
-   NEWS – PUBLIC
-================================ */
+
 app.get("/api/news", async (_req, res) => {
   try {
     const news = await News.find().sort({ date: -1 });
@@ -294,9 +276,7 @@ app.get("/api/news", async (_req, res) => {
   }
 });
 
-/* ================================
-   NEWS – ADMIN
-================================ */
+
 app.post("/api/news", authMiddleware, async (req, res) => {
   try {
     const { title, body, imageUrl = "", linkUrl = "" } = req.body || {};
@@ -332,9 +312,7 @@ app.delete("/api/news/:id", authMiddleware, async (req, res) => {
   }
 });
 
-/* ================================
-   DB CONNECT (export)
-================================ */
+
 export async function connectDB(uri) {
   const connUri = uri || process.env.MONGODB_URI;
   if (!connUri) throw new Error("MONGODB_URI saknas");
